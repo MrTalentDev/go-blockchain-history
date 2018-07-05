@@ -1,0 +1,27 @@
+{
+  "name": "poa-history",
+  "version": "1.0.0",
+  "description": "Nest TypeScript starter repository",
+  "license": "",
+  "scripts": {
+    "start": "ts-node src/main",
+    "prestart:prod": "tsc",
+    "start:prod": "node dist/main.js"
+  },
+  "dependencies": {
+    "@nestjs/common": "^5.0.0",
+    "@nestjs/core": "^5.0.0",
+    "@types/dotenv": "^4.0.3",
+    "dotenv": "^6.0.0",
+    "mongoose": "^5.0.6",
+    "reflect-metadata": "^0.1.12",
+    "rxjs": "^6.0.0",
+    "typescript": "^2.8.0"
+  },
+  "devDependencies": {
+    "@types/mongoose": "^5.0.2",
+    "@types/node": "^7.0.41",
+    "ts-node": "^6.0.0",
+    "tslint": "^5.9.1"
+  }
+}
