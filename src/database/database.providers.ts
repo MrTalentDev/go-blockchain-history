@@ -18,4 +18,3 @@ export const databaseProviders = [
             await mongoose.connect(getMongoProviderConfig()),
     },
 ];
-
