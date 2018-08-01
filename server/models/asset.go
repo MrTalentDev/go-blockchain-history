@@ -15,4 +15,5 @@ type Asset struct {
 	CreatedOn int64         `json:"created_on" bson:"created_on"`
 	UpdatedOn int64         `json:"updated_on" bson:"updated_on"`
 	AssetId   string		`json:"assetId" bson:"assetId"`
+	TxNumber int64         `json:"txNumber" bson:"txNumber"`
 }

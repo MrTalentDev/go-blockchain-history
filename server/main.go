@@ -19,6 +19,8 @@ func main() {
 
 	r.GET("/new/:assetId", assets.New)
 	r.GET("/list", assets.List)
+	r.GET("/tx/:assetId", assets.ReturnAssetTx)
+	r.GET("/atx/:assetId", assets.IncrementAssetTx)
 
 	// getProof(assetID, txNumber) - достает merkleproof
 	// http://localhost:8080/getProof/g/g
