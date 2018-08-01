@@ -37,15 +37,6 @@ func intToKeccak(data int) []byte {
 	return hash
 }
 
-//func byteToKeccak(data int) []byte {
-//
-//	hash := solsha3.SoliditySHA3(
-//		solsha3.String(strconv.FormatInt(int64(data), 10)),
-//	)
-//
-//	return hash
-//}
-
 func cellCreation(assetID int, txNumber int) []byte {
 
 	a := intToKeccak(txNumber)

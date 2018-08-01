@@ -4,16 +4,21 @@ import (
 	"github.com/gin-gonic/gin"
 	"encoding/json"
 	"log"
+	"./db"
+	"./middlewares"
+	"./handlers/assets"
 )
+
+
 
 func main() {
 	r := gin.Default()
 
-	type Proof struct {
-		HashProof string
-	}
+	r.Use(middlewares.Connect)
+	r.Use(middlewares.ErrorHandler)
 
-	type Proofs []Proof
+	r.GET("/new/:assetId", assets.New)
+	r.GET("/list", assets.List)
 
 	// getProof(assetID, txNumber) - достает merkleproof
 	// http://localhost:8080/getProof/g/g
@@ -77,9 +82,13 @@ func main() {
 	r.Run() // listen and serve on 0.0.0.0:8080
 }
 
-func getMerkleProof() []string {
-	var m []string
+func init() {
+	db.Connect()
+}
 
+func getMerkleProof() []string {
+
+	var m []string
 	m = append(m, "1")
 	m = append(m, "1")
 	m = append(m, "1")
@@ -100,3 +109,9 @@ func getTimestampAndDataHash(m []string) []string {
 	answer = append(answer, m[1])
 	return answer
 }
+
+type Proof struct {
+	HashProof string
+}
+
+type Proofs []Proof
