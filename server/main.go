@@ -9,8 +9,6 @@ import (
 	"./handlers/assets"
 )
 
-
-
 func main() {
 	r := gin.Default()
 

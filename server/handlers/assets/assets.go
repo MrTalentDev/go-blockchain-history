@@ -8,28 +8,37 @@ import (
 	"gopkg.in/mgo.v2/bson"
 	"net/http"
 	"encoding/hex"
-	)
+	"time"
+)
 
 // New asset
 func New(c *gin.Context) {
+	old := getAssetId(c)
 	db := c.MustGet("db").(*mgo.Database)
 	asset := models.Asset{}
 	assetId := c.Param("assetId")
+	if old == assetId {
+		c.JSON(200, gin.H{
+			"Answer": "This assetId is already created",
+		})
+		return
+	}
 	asset.AssetId = assetId
+	asset.CreatedOn = time.Now().UnixNano() / int64(time.Millisecond)
+	asset.UpdatedOn = asset.CreatedOn
 	asset.Hash = hex.EncodeToString(hashing.StringToKeccak(assetId))
 	err := c.Bind(&asset)
 	if err != nil {
 		c.Error(err)
 		return
 	}
-
 	err = db.C(models.CollectionAssets).Insert(asset)
-
 	if err != nil {
 		c.Error(err)
 	}
-	println("success")
-	//c.Redirect(http.StatusMovedPermanently, "/articles")
+	c.JSON(http.StatusOK, gin.H{
+		"assetId": assetId,
+	})
 }
 
 // List all assets
@@ -58,10 +67,10 @@ func IncrementAssetTx(c *gin.Context) {
 	query := bson.M{"assetId": c.Param("assetId")}
 	var result bson.M
 	changeInDocument := mgo.Change{
-		Update:    bson.M{"$inc": bson.M{"txNumber": 1}},
+		Update:    bson.M{"$inc": bson.M{"txNumber": 1, "updated_on": time.Now().UnixNano() / int64(time.Millisecond),}},
 		ReturnNew: true,
 	}
-	_, err:= db.C(models.CollectionAssets).Find(query).Apply(changeInDocument, &result)
+	_, err := db.C(models.CollectionAssets).Find(query).Apply(changeInDocument, &result)
 	if err != nil {
 		panic(err)
 	}
@@ -86,3 +95,17 @@ func getTxNumber(c *gin.Context) int64 {
 	return asset.TxNumber
 }
 
+func getAssetId(c *gin.Context) string {
+	db := c.MustGet("db").(*mgo.Database)
+	query := bson.M{"assetId": c.Param("assetId")}
+	asset := models.Asset{}
+	err := c.Bind(&asset)
+	if err != nil {
+		c.Error(err)
+	}
+	err = db.C(models.CollectionAssets).Find(query).One(&asset)
+	if err != nil {
+		c.Error(err)
+	}
+	return asset.AssetId
+}
