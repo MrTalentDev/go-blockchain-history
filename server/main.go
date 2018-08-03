@@ -20,6 +20,9 @@ func main() {
 	// http://localhost:8080/list
 	r.GET("/list", assets.List)
 
+
+	r.GET("/test", assets.Test)
+
 	// return last txNumber of assetId
 	// http://localhost:8080/tx/assetOne
 	r.GET("/tx/:assetId", assets.ReturnAssetTx)

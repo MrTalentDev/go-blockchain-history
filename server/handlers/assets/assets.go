@@ -3,7 +3,7 @@ package assets
 import (
 	"github.com/gin-gonic/gin"
 	"../../models"
-	"../../ethercrypto"
+	"../../ethercrypto/hashing"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"net/http"
@@ -11,6 +11,7 @@ import (
 	"encoding/json"
 	"time"
 	"log"
+	"../../ethercrypto/tree"
 )
 
 // New asset
@@ -132,6 +133,15 @@ func Post(c *gin.Context) {
 			"txNumber": " ",
 		})
 	}
+
+}
+
+func Test(c *gin.Context) {
+	tree.Tree()
+	c.JSON(200, gin.H{
+		"txNumber": "1",
+	})
+
 
 }
 
