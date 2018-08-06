@@ -5,10 +5,10 @@
 package middlewares
 
 import (
-"net/http"
+	"net/http"
 
-"github.com/gin-gonic/gin"
-"../db"
+	"github.com/gin-gonic/gin"
+	"../db"
 )
 
 // Connect middleware clones the database session for each request and

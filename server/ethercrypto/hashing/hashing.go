@@ -5,8 +5,6 @@ import (
 	"strconv"
 )
 
-
-
 func StringToKeccak(data string) []byte {
 
 	hash := solsha3.SoliditySHA3(

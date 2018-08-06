@@ -7,11 +7,11 @@ import (
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"net/http"
-	"encoding/hex"
 	"encoding/json"
 	"time"
 	"log"
 	"../../ethercrypto/tree"
+	"encoding/hex"
 )
 
 // New asset
@@ -20,6 +20,7 @@ func New(c *gin.Context) {
 	db := c.MustGet("db").(*mgo.Database)
 	asset := models.Asset{}
 	assetId := c.Param("assetId")
+	assets := c.Param("assets")
 	if old == assetId {
 		c.JSON(200, gin.H{
 			"Answer": "This assetId is already created",
@@ -29,7 +30,8 @@ func New(c *gin.Context) {
 	asset.AssetId = assetId
 	asset.CreatedOn = time.Now().UnixNano() / int64(time.Millisecond)
 	asset.UpdatedOn = asset.CreatedOn
-	asset.Hash = hex.EncodeToString(hashing.StringToKeccak(assetId))
+	asset.Hash = hashing.StringToKeccak(assetId)
+	asset.Assets = assetId + hex.EncodeToString(hashing.StringToKeccak(assets))
 	err := c.Bind(&asset)
 	if err != nil {
 		c.Error(err)
@@ -103,7 +105,6 @@ func GetProof(c *gin.Context) {
 	if err != nil {
 		log.Fatal("Cannot encode to JSON ", err)
 	}
-
 	c.Data(200, "JSON", myJson)
 }
 
@@ -123,26 +124,16 @@ func Get(c *gin.Context) {
 func Post(c *gin.Context) {
 	var m []string
 	m = append(m, c.Param("assetID"))
-	m = append(m, c.Param("dataHash"))
-
-	c.JSON(200, gin.H{
-		"txNumber": getTxNumbers(),
-	})
-	if len(m) == 0 {
-		c.JSON(200, gin.H{
-			"txNumber": " ",
-		})
-	}
-
+	m = append(m, c.Param("asset"))
+	updateAssetsByAssetId(c)
 }
 
 func Test(c *gin.Context) {
-	tree.Tree()
+	var m []string
+	m = append(m, c.Param("asset"))
 	c.JSON(200, gin.H{
-		"txNumber": "1",
+		"txNumber": tree.Tree(m),
 	})
-
-
 }
 
 func getTxNumber(c *gin.Context) int64 {
@@ -186,9 +177,31 @@ func getMerkleProof() []string {
 	return m
 }
 
-func getTxNumbers() string {
-
-	return "1111"
+func updateAssetsByAssetId(c *gin.Context) {
+	db := c.MustGet("db").(*mgo.Database)
+	query := bson.M{"assetId": c.Param("assetId")}
+	query2 := bson.M{"assetId": c.Param("assetId")}
+	oldAssets := getsAssetsByAssetById(c)
+	newAssets := oldAssets + c.Param("assetId") + c.Param("assets")
+	var result bson.M
+	var result2 bson.M
+	changeInDocument := mgo.Change{
+		Update:    bson.M{"$inc": bson.M{"txNumber": 1}},
+		ReturnNew: true,
+	}
+	changeInDocument2 := mgo.Change{
+		Update:    bson.M{"$set": bson.M{"updated_on": time.Now().UnixNano() / int64(time.Millisecond), "assets": newAssets}},
+	}
+	_, err := db.C(models.CollectionAssets).Find(query2).Apply(changeInDocument2, &result2)
+	s, err := db.C(models.CollectionAssets).Find(query).Apply(changeInDocument, &result)
+	println(s)
+	if err != nil {
+		panic(err)
+	}
+	newID := result["txNumber"]
+	c.JSON(http.StatusOK, gin.H{
+		"txNumber": newID,
+	})
 }
 
 func getTimestampAndDataHash(m []string) []string {
@@ -197,6 +210,21 @@ func getTimestampAndDataHash(m []string) []string {
 	answer = append(answer, m[0])
 	answer = append(answer, m[1])
 	return answer
+}
+
+func getsAssetsByAssetById(c *gin.Context) string {
+	db := c.MustGet("db").(*mgo.Database)
+	query := bson.M{"assets": c.Param("assets")}
+	assets := models.Asset{}
+	err := c.Bind(&assets)
+	if err != nil {
+		c.Error(err)
+	}
+	err = db.C(models.CollectionAssets).Find(query).One(&assets)
+	if err != nil {
+		c.Error(err)
+	}
+	return assets.Assets
 }
 
 type Proof struct {
