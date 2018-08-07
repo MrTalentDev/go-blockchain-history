@@ -10,9 +10,17 @@ import (
 	"encoding/json"
 	"time"
 	"log"
-	"../../ethercrypto/tree"
+	"../../ethercrypto/tree/customsmt"
 	"encoding/hex"
 )
+
+func initTree(c *gin.Context) {
+	var m []string
+	m = append(m, c.Param("assets"))
+	customsmt.CreateTree(customsmt.CreateContent(m))
+	//db := c.MustGet("db").(*mgo.Database)
+	//asset := models.Asset{}
+}
 
 // New asset
 func New(c *gin.Context) {
@@ -89,18 +97,14 @@ func GetProof(c *gin.Context) {
 	var m []string
 	m = append(m, c.Param("assetId"))
 	m = append(m, c.Param("txNumber"))
-
 	var d = getMerkleProof()
-
 	var proofs = Proofs{}
-
 	for i := 0; i < len(d); i++ {
 		var a = d[i]
 		proofs = append(proofs, Proof{
 			a,
 		})
 	}
-
 	myJson, err := json.Marshal(proofs)
 	if err != nil {
 		log.Fatal("Cannot encode to JSON ", err)
@@ -112,9 +116,7 @@ func Get(c *gin.Context) {
 	var m []string
 	m = append(m, c.Param("assetId"))
 	m = append(m, c.Param("txNumber"))
-
 	var d = getTimestampAndDataHash(m)
-
 	c.JSON(200, gin.H{
 		"timestamp": d[0],
 		"dataHash":  d[1],
@@ -125,14 +127,6 @@ func Post(c *gin.Context) {
 	oldAssets := getsAssetsByAssetById(c)
 	updateAssetsByAssetId(c, oldAssets)
 	defer incrementAssetTx(c)
-}
-
-func Test(c *gin.Context) {
-	var m []string
-	m = append(m, c.Param("asset"))
-	c.JSON(200, gin.H{
-		"txNumber": tree.Tree(m),
-	})
 }
 
 func getTxNumber(c *gin.Context) int64 {
@@ -166,7 +160,6 @@ func getAssetId(c *gin.Context) string {
 }
 
 func getMerkleProof() []string {
-
 	var m []string
 	m = append(m, "1")
 	m = append(m, "1")

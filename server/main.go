@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
-	"./middlewares"
-	"./handlers/assets"
 	"./db"
+	"./handlers/assets"
+	"./middlewares"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -20,7 +20,7 @@ func main() {
 	// http://localhost:8080/list
 	r.GET("/list", assets.List)
 
-	r.GET("/test/:asset", assets.Test)
+	//r.GET("/test/:asset", assets.Test)
 
 	// return last txNumber of assetId
 	// http://localhost:8080/tx/assetOne
