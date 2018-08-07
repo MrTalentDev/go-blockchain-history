@@ -67,7 +67,7 @@ func ReturnAssetTx(c *gin.Context) {
 }
 
 // Returns incremented txNumber for assetId and safe it to db
-func IncrementAssetTx(c *gin.Context) {
+func incrementAssetTx(c *gin.Context) {
 	db := c.MustGet("db").(*mgo.Database)
 	query := bson.M{"assetId": c.Param("assetId")}
 	var result bson.M
@@ -87,7 +87,7 @@ func IncrementAssetTx(c *gin.Context) {
 
 func GetProof(c *gin.Context) {
 	var m []string
-	m = append(m, c.Param("assetID"))
+	m = append(m, c.Param("assetId"))
 	m = append(m, c.Param("txNumber"))
 
 	var d = getMerkleProof()
@@ -110,7 +110,7 @@ func GetProof(c *gin.Context) {
 
 func Get(c *gin.Context) {
 	var m []string
-	m = append(m, c.Param("assetID"))
+	m = append(m, c.Param("assetId"))
 	m = append(m, c.Param("txNumber"))
 
 	var d = getTimestampAndDataHash(m)
@@ -122,10 +122,9 @@ func Get(c *gin.Context) {
 }
 
 func Post(c *gin.Context) {
-	var m []string
-	m = append(m, c.Param("assetID"))
-	m = append(m, c.Param("asset"))
-	updateAssetsByAssetId(c)
+	oldAssets := getsAssetsByAssetById(c)
+	updateAssetsByAssetId(c, oldAssets)
+	defer incrementAssetTx(c)
 }
 
 func Test(c *gin.Context) {
@@ -177,31 +176,19 @@ func getMerkleProof() []string {
 	return m
 }
 
-func updateAssetsByAssetId(c *gin.Context) {
+func updateAssetsByAssetId(c *gin.Context, oldAssets string) {
 	db := c.MustGet("db").(*mgo.Database)
 	query := bson.M{"assetId": c.Param("assetId")}
-	query2 := bson.M{"assetId": c.Param("assetId")}
-	oldAssets := getsAssetsByAssetById(c)
 	newAssets := oldAssets + c.Param("assetId") + c.Param("assets")
+	println(newAssets)
 	var result bson.M
-	var result2 bson.M
 	changeInDocument := mgo.Change{
-		Update:    bson.M{"$inc": bson.M{"txNumber": 1}},
-		ReturnNew: true,
+		Update: bson.M{"$set": bson.M{"updated_on": time.Now().UnixNano() / int64(time.Millisecond), "assets": newAssets}},
 	}
-	changeInDocument2 := mgo.Change{
-		Update:    bson.M{"$set": bson.M{"updated_on": time.Now().UnixNano() / int64(time.Millisecond), "assets": newAssets}},
-	}
-	_, err := db.C(models.CollectionAssets).Find(query2).Apply(changeInDocument2, &result2)
-	s, err := db.C(models.CollectionAssets).Find(query).Apply(changeInDocument, &result)
-	println(s)
+	_, err := db.C(models.CollectionAssets).Find(query).Apply(changeInDocument, &result)
 	if err != nil {
 		panic(err)
 	}
-	newID := result["txNumber"]
-	c.JSON(http.StatusOK, gin.H{
-		"txNumber": newID,
-	})
 }
 
 func getTimestampAndDataHash(m []string) []string {
@@ -214,17 +201,17 @@ func getTimestampAndDataHash(m []string) []string {
 
 func getsAssetsByAssetById(c *gin.Context) string {
 	db := c.MustGet("db").(*mgo.Database)
-	query := bson.M{"assets": c.Param("assets")}
-	assets := models.Asset{}
-	err := c.Bind(&assets)
+	query := bson.M{"assetId": c.Param("assetId")}
+	asset := models.Asset{}
+	err := c.Bind(&asset)
 	if err != nil {
 		c.Error(err)
 	}
-	err = db.C(models.CollectionAssets).Find(query).One(&assets)
+	err = db.C(models.CollectionAssets).Find(query).One(&asset)
 	if err != nil {
 		c.Error(err)
 	}
-	return assets.Assets
+	return asset.Assets
 }
 
 type Proof struct {
