@@ -262,7 +262,9 @@ func (m *MerkleTree) GetHash() []string {
 	return s
 }
 
-
+func ReturnTree(m *MerkleTree) ([]byte, []*Node)  {
+	return  m.merkleRoot, m.Leafs
+}
 
 //func (n *Node) stringHash() string {
 //	return hex.EncodeToString(n.Hash)
