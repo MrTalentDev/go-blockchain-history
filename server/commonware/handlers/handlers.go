@@ -3,6 +3,7 @@ package handlers
 import (
 	"github.com/gin-gonic/gin"
 	"../assets"
+	"../tree"
 	"net/http"
 	"encoding/hex"
 )
@@ -15,11 +16,15 @@ func UpdateAssetId(c *gin.Context) {
 
 // Create new assetId with asset
 func CreateAssetId(c *gin.Context) {
-	id := assets.CheckAndReturn(c)
-	//initTree(c)
+	id, er := assets.CheckAndReturn(c)
+	tree.RebuildOrCreateTree(c)
+	if er == "err" {
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"assetId": id,
 	})
+
 }
 
 // Lists all assets in DB

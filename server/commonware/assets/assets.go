@@ -11,15 +11,15 @@ import (
 	"strconv"
 )
 
-func CheckAndReturn(c *gin.Context) string {
+func CheckAndReturn(c *gin.Context) (string, string) {
 	_, err := GetAssetId(c)
 	if err == nil {
 		c.JSON(200, gin.H{
 			"Answer": "This assetId is already created",
 		})
-		return ""
+		return "", "err"
 	}
-	return InitAsset(c)
+	return InitAsset(c), ""
 }
 
 func GetAssetId(c *gin.Context) (string, error) {
@@ -75,10 +75,6 @@ func GetAssetsByAssetById(c *gin.Context) map[string][]byte {
 	db := c.MustGet("db").(*mgo.Database)
 	query := bson.M{"assetId": c.Param("assetId")}
 	asset := models.Asset{}
-	//err := c.Bind(&asset)
-	//if err != nil {
-	//	println("GetAssetsByAssetById mistake 1")
-	//}
 	err := db.C(models.CollectionAssets).Find(query).One(&asset)
 	if err != nil {
 		println("GetAssetsByAssetById mistake 2")
@@ -94,7 +90,6 @@ func UpdateAssetsByAssetId(c *gin.Context) {
 	stringTx := strconv.FormatInt(txNumber, 10)
 	m := GetAssetsByAssetById(c)
 	m[stringTx] = hashing.StringToKeccak(c.Param("assets"))
-	//println(newAssets)
 	var result bson.M
 	changeInDocument := mgo.Change{
 		Update: bson.M{"$set": bson.M{"updated_on": time.Now().UnixNano() / int64(time.Millisecond), "assets": m}},
@@ -155,10 +150,6 @@ func getTxNumber(c *gin.Context) int64 {
 	db := c.MustGet("db").(*mgo.Database)
 	query := bson.M{"assetId": c.Param("assetId")}
 	asset := models.Asset{}
-	//err := c.Bind(&asset)
-	//if err != nil {
-	//	println("tx mistake 1")
-	//}
 	err := db.C(models.CollectionAssets).Find(query).One(&asset)
 	if err != nil {
 		println("tx mistake 2")
