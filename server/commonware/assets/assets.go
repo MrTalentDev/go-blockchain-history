@@ -28,7 +28,7 @@ func GetAssetId(c *gin.Context) (string, error) {
 	asset := models.Asset{}
 	err := c.Bind(&asset)
 	if err != nil {
-		c.Error(err)
+		println(err)
 	}
 	err = db.C(models.CollectionAssets).Find(query).One(&asset)
 	if err != nil {
@@ -51,12 +51,12 @@ func InitAsset(c *gin.Context) string {
 	asset.Assets = m
 	err := c.Bind(&asset)
 	if err != nil {
-		c.Error(err)
+		println("InitAsset mistake 1")
 		return ""
 	}
 	err = db.C(models.CollectionAssets).Insert(asset)
 	if err != nil {
-		c.Error(err)
+		println("InitAsset mistake 2")
 	}
 	return asset.AssetId
 }
@@ -66,7 +66,7 @@ func FindALlAssets(c *gin.Context) []models.Asset {
 	assets := []models.Asset{}
 	err := db.C(models.CollectionAssets).Find(nil).All(&assets)
 	if err != nil {
-		c.Error(err)
+		println("FindALlAssets mistake 1")
 	}
 	return assets
 }
@@ -75,13 +75,13 @@ func GetAssetsByAssetById(c *gin.Context) map[string][]byte {
 	db := c.MustGet("db").(*mgo.Database)
 	query := bson.M{"assetId": c.Param("assetId")}
 	asset := models.Asset{}
-	err := c.Bind(&asset)
+	//err := c.Bind(&asset)
+	//if err != nil {
+	//	println("GetAssetsByAssetById mistake 1")
+	//}
+	err := db.C(models.CollectionAssets).Find(query).One(&asset)
 	if err != nil {
-		c.Error(err)
-	}
-	err = db.C(models.CollectionAssets).Find(query).One(&asset)
-	if err != nil {
-		c.Error(err)
+		println("GetAssetsByAssetById mistake 2")
 	}
 	return asset.Assets
 }
@@ -93,7 +93,7 @@ func UpdateAssetsByAssetId(c *gin.Context) {
 	txNumber++
 	stringTx := strconv.FormatInt(txNumber, 10)
 	m := GetAssetsByAssetById(c)
-	m[stringTx] = hashing.StringToKeccak(c.Param("assetId"))
+	m[stringTx] = hashing.StringToKeccak(c.Param("assets"))
 	//println(newAssets)
 	var result bson.M
 	changeInDocument := mgo.Change{
@@ -101,7 +101,7 @@ func UpdateAssetsByAssetId(c *gin.Context) {
 	}
 	_, err := db.C(models.CollectionAssets).Find(query).Apply(changeInDocument, &result)
 	if err != nil {
-		panic(err)
+		println("UpdateAssetsByAssetId mistake 1")
 	}
 }
 
@@ -116,7 +116,7 @@ func IncrementAssetTx(c *gin.Context) {
 	}
 	_, err := db.C(models.CollectionAssets).Find(query).Apply(changeInDocument, &result)
 	if err != nil {
-		panic(err)
+		println("IncrementAssetTx mistake 1")
 	}
 	newID := result["txNumber"]
 	c.JSON(http.StatusOK, gin.H{
@@ -131,16 +131,16 @@ func GetAssetByAssetIdAndTxNumber(c *gin.Context) []byte {
 	st = c.Param("txNumber")
 	txNumber, err := strconv.ParseInt(st, 10, 64)
 	if err != nil {
-		panic(err)
+		println(err)
 	}
 	asset := models.Asset{}
 	err = c.Bind(&asset)
 	if err != nil {
-		panic(err)
+		println("GetAssetByAssetIdAndTxNumber mistake 1")
 	}
 	err = db.C(models.CollectionAssets).Find(query).One(&asset)
 	if err != nil {
-		panic(err)
+		println("GetAssetByAssetIdAndTxNumber mistake 1")
 	}
 	m := asset.Assets
 	stringTx := strconv.FormatInt(txNumber, 10)
@@ -155,13 +155,13 @@ func getTxNumber(c *gin.Context) int64 {
 	db := c.MustGet("db").(*mgo.Database)
 	query := bson.M{"assetId": c.Param("assetId")}
 	asset := models.Asset{}
-	err := c.Bind(&asset)
+	//err := c.Bind(&asset)
+	//if err != nil {
+	//	println("tx mistake 1")
+	//}
+	err := db.C(models.CollectionAssets).Find(query).One(&asset)
 	if err != nil {
-		c.Error(err)
-	}
-	err = db.C(models.CollectionAssets).Find(query).One(&asset)
-	if err != nil {
-		c.Error(err)
+		println("tx mistake 2")
 	}
 	return asset.TxNumber
 }

@@ -41,7 +41,6 @@ func GetTotalProof(c *gin.Context) {
 
 // Get timestamp and hash of specified asset in assetId
 func GetData(c *gin.Context) {
-
 	c.JSON(http.StatusOK, gin.H{
 		"assets": hex.EncodeToString(assets.GetAssetByAssetIdAndTxNumber(c)),
 	})

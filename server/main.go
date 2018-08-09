@@ -37,7 +37,7 @@ func main() {
 	//// post(assetID, dataHash) - добавляет данные для данного assetId, автоинкрементит txNumber. Возвращает txNumber.
 	//// http://localhost:8080/post/1/11
 	r.POST("/new/:assetId/:assets", handlers.CreateAssetId)
-
+	r.POST("/update/:assetId/:assets", handlers.UpdateAssetId)
 	r.GET("/get/:assetId/:txNumber", handlers.GetData)
 	//// create new asset with assetId
 	//// http://localhost:8080/new/assetOne
