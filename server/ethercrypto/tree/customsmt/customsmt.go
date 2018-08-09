@@ -32,9 +32,9 @@ func CreateContent(content []string) []smerkletree.Content {
 	return list
 }
 
-func CreateTree(list []smerkletree.Content) *smerkletree.MerkleTree {
+func CreateTree(list []smerkletree.Content) (*smerkletree.MerkleTree) {
 	//Create a new Merkle Tree from the list of Content
-	t, err := smerkletree.NewTree(list)
+	t,  err := smerkletree.NewTree(list)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -59,6 +59,7 @@ func VerifySpecificLeaf(tree *smerkletree.MerkleTree, content smerkletree.Conten
 }
 
 func ShowLeafs(tree *smerkletree.MerkleTree) string {
+
 	return tree.String()
 }
 
@@ -72,4 +73,7 @@ func VerifyAll(tree *smerkletree.MerkleTree) bool {
 
 func Hashes(tree *smerkletree.MerkleTree) []string {
 	return tree.GetHash()
+}
+func Strings(tree *smerkletree.MerkleTree) []string {
+	return tree.Strings()
 }

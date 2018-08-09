@@ -18,6 +18,8 @@ func main() {
 	r.POST("/new/:assetId/:assets", handlers.CreateAssetId)
 	r.POST("/update/:assetId/:assets", handlers.UpdateAssetId)
 	r.GET("/get/:assetId/:txNumber", handlers.GetData)
+	r.GET("/proof/:assets", handlers.GetSpecifiedProof)
+	r.GET("/proof", handlers.GetTotalProof)
 	r.GET("/list", handlers.List)
 	r.Run() // listen and serve on 0.0.0.0:8080
 }

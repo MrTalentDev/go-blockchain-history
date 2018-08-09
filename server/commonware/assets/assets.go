@@ -9,15 +9,16 @@ import (
 	"net/http"
 	"time"
 	"strconv"
+	"encoding/hex"
 )
 
-func CheckAndReturn(c *gin.Context) (string, string) {
+func CheckAndReturn(c *gin.Context) ([]string, string) {
 	_, err := GetAssetId(c)
 	if err == nil {
 		c.JSON(200, gin.H{
 			"Answer": "This assetId is already created",
 		})
-		return "", "err"
+		return nil, "err"
 	}
 	return InitAsset(c), ""
 }
@@ -37,7 +38,7 @@ func GetAssetId(c *gin.Context) (string, error) {
 	return asset.AssetId, nil
 }
 
-func InitAsset(c *gin.Context) string {
+func InitAsset(c *gin.Context) []string {
 	db := c.MustGet("db").(*mgo.Database)
 	asset := models.Asset{}
 	assetId := c.Param("assetId")
@@ -52,13 +53,16 @@ func InitAsset(c *gin.Context) string {
 	err := c.Bind(&asset)
 	if err != nil {
 		println("InitAsset mistake 1")
-		return ""
+		return nil
 	}
 	err = db.C(models.CollectionAssets).Insert(asset)
 	if err != nil {
 		println("InitAsset mistake 2")
 	}
-	return asset.AssetId
+	var a []string
+	a = append(a, asset.AssetId)
+	a = append(a, hex.EncodeToString(asset.Hash))
+	return a
 }
 
 func FindALlAssets(c *gin.Context) []models.Asset {

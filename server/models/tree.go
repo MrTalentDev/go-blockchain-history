@@ -7,8 +7,7 @@ const (
 
 // Assets model
 type Tree struct {
-	Tree	  []byte		`json:"tree" bson:"tree"`
-	Having    bool			`json:"having" bson:"having"`
-	TreeId	  string		`json:"TreeId" bson:"TreeId"`
+	TreeContent []string `json:"TreeContent" bson:"TreeContent"`
+	Having      bool     `json:"having" bson:"having"`
+	TreeId      string   `json:"TreeId" bson:"TreeId"`
 }
-

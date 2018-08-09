@@ -6,7 +6,14 @@ import (
 	"../tree"
 	"net/http"
 	"encoding/hex"
+	"log"
+	"encoding/json"
 )
+
+type Proof struct {
+	HashProof string
+}
+type Proofs []Proof
 
 // Add new asset to assetId and change merkle tree
 func UpdateAssetId(c *gin.Context) {
@@ -22,7 +29,8 @@ func CreateAssetId(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"assetId": id,
+		"assetId": id[0],
+		"hash": id[1],
 	})
 
 }
@@ -36,11 +44,29 @@ func List(c *gin.Context) {
 
 // Get Merkle proof of specified asset
 func GetSpecifiedProof(c *gin.Context) {
-
+	c.JSON(http.StatusOK, gin.H{
+		"result": tree.GetSpecificProof(c),
+	})
 }
 
 // Get total Merkle proof
 func GetTotalProof(c *gin.Context) {
+	d := tree.GetTotalProof(c)
+	var proofs = Proofs{}
+	for i := 0; i < len(d); i++ {
+		var a = d[i]
+		proofs = append(proofs,
+			Proof{
+				a,
+			})
+	}
+
+	myJson, err := json.Marshal(proofs)
+	if err != nil {
+		log.Fatal("Cannot encode to JSON ", err)
+	}
+
+	c.Data(http.StatusOK, "JSON", myJson)
 
 }
 

@@ -44,6 +44,7 @@ func (n *Node) verifyNode() ([]byte, error) {
 	if n.leaf {
 		return n.C.CalculateHashBytes()
 	}
+
 	rightBytes, err := n.Right.verifyNode()
 	if err != nil {
 		return nil, err
@@ -66,17 +67,15 @@ func (n *Node) calculateNodeHash() ([]byte, error) {
 	if n.leaf {
 		return n.C.CalculateHashBytes()
 	}
-
 	hash := solsha3.SoliditySHA3(
 		solsha3.Bytes32(append(n.Left.Hash, n.Right.Hash...)),
 	)
-
 	return hash, nil
 }
 
 //NewTree creates a new Merkle Tree using the content cs.
 func NewTree(cs []Content) (*MerkleTree, error) {
-	root, leafs, err := buildWithContent(cs)
+	root, leafs, err := BuildWithContent(cs)
 	if err != nil {
 		return nil, err
 	}
@@ -88,10 +87,10 @@ func NewTree(cs []Content) (*MerkleTree, error) {
 	return t, nil
 }
 
-//buildWithContent is a helper function that for a given set of Contents, generates a
+//BuildWithContent is a helper function that for a given set of Contents, generates a
 //corresponding tree and returns the root node, a list of leaf nodes, and a possible error.
 //Returns an error if cs contains no Contents.
-func buildWithContent(cs []Content) (*Node, []*Node, error) {
+func BuildWithContent(cs []Content) (*Node, []*Node, error) {
 	if len(cs) == 0 {
 		return nil, nil, errors.New("error: cannot construct tree with no content")
 	}
@@ -165,7 +164,7 @@ func (m *MerkleTree) RebuildTree() error {
 	for _, c := range m.Leafs {
 		cs = append(cs, c.C)
 	}
-	root, leafs, err := buildWithContent(cs)
+	root, leafs, err := BuildWithContent(cs)
 	if err != nil {
 		return err
 	}
@@ -179,7 +178,7 @@ func (m *MerkleTree) RebuildTree() error {
 //the tree will be replaced the MerkleTree completely survives this operation. Returns an error if the
 //list of content cs contains no entries.
 func (m *MerkleTree) RebuildTreeWith(cs []Content) error {
-	root, leafs, err := buildWithContent(cs)
+	root, leafs, err := BuildWithContent(cs)
 	if err != nil {
 		return err
 	}
@@ -214,12 +213,15 @@ func (m *MerkleTree) VerifyContent(content Content) (bool, error) {
 		}
 		if ok {
 			currentParent := l.Parent
+			println(hex.EncodeToString(currentParent.Hash), "ONEEE")
 			for currentParent != nil {
 				rightBytes, err := currentParent.Right.calculateNodeHash()
+				println(hex.EncodeToString(rightBytes), "TWOO")
 				if err != nil {
 					return false, err
 				}
 				leftBytes, err := currentParent.Left.calculateNodeHash()
+				println(hex.EncodeToString(leftBytes), "THREEE")
 				if err != nil {
 					return false, err
 				}
@@ -228,12 +230,13 @@ func (m *MerkleTree) VerifyContent(content Content) (bool, error) {
 						return false, nil
 					}
 					currentParent = currentParent.Parent
+					println("FOURR")
 				} else {
-
 					if bytes.Compare(solsha3.SoliditySHA3(solsha3.Bytes32(append(leftBytes, rightBytes...)), ), currentParent.Hash) != 0 {
 						return false, nil
 					}
 					currentParent = currentParent.Parent
+					println("FIVEEEE")
 				}
 			}
 			return true, nil
@@ -257,15 +260,22 @@ func (m *MerkleTree) GetHash() []string {
 	var s []string
 	for _, l := range m.Leafs {
 		s = append(s, hex.EncodeToString(l.Hash))
-
 	}
 	return s
 }
 
-func ReturnTree(m *MerkleTree) ([]byte, []*Node)  {
-	return  m.merkleRoot, m.Leafs
+func ReturnTree(m *MerkleTree) ([]byte, []*Node) {
+	return m.merkleRoot, m.Leafs
 }
 
 //func (n *Node) stringHash() string {
 //	return hex.EncodeToString(n.Hash)
 //}
+
+func (m *MerkleTree) Strings() []string {
+	var s []string
+	for _, l := range m.Leafs {
+		s = append(s, hex.EncodeToString(l.Hash))
+	}
+	return s
+}

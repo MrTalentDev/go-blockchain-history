@@ -1,6 +1,8 @@
 package models
 
-import "gopkg.in/mgo.v2/bson"
+import (
+	"gopkg.in/mgo.v2/bson"
+)
 
 const (
 	// CollectionAssets holds the name of the assets collection
