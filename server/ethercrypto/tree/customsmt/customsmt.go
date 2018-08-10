@@ -14,7 +14,7 @@ type TestContent struct {
 //CalculateHashBytes hashes the values of a TestContent
 func (t TestContent) CalculateHashBytes() ([]byte, error) {
 	hash := solsha3.SoliditySHA3(
-		solsha3.Bytes32([]byte(t.X)),
+		solsha3.String(t.X),
 	)
 	return hash, nil
 }
@@ -34,7 +34,7 @@ func CreateContent(content []string) []smerkletree.Content {
 
 func CreateTree(list []smerkletree.Content) (*smerkletree.MerkleTree) {
 	//Create a new Merkle Tree from the list of Content
-	t,  err := smerkletree.NewTree(list)
+	t, err := smerkletree.NewTree(list)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -59,7 +59,6 @@ func VerifySpecificLeaf(tree *smerkletree.MerkleTree, content smerkletree.Conten
 }
 
 func ShowLeafs(tree *smerkletree.MerkleTree) string {
-
 	return tree.String()
 }
 

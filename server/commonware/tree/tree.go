@@ -6,13 +6,15 @@ import (
 	"gopkg.in/mgo.v2/bson"
 	"../../ethercrypto/tree/customsmt"
 	"../../models"
+	"encoding/hex"
 )
 
 func RebuildOrCreateTree(c *gin.Context) {
 	res := checkThatTreeIs(c)
 	switch res {
 	case true:
-		return
+		d := getContent(c)
+		rebuildTree(c, d)
 	case false:
 		createTreeContent(c)
 	}
@@ -29,14 +31,20 @@ func GetSpecificProof(c *gin.Context) bool {
 	return res
 }
 
-func GetTotalProof(c *gin.Context) []string {
+func GetTotalProof(c *gin.Context) ([]string, string) {
 	cont := getContent(c)
 	t := customsmt.CreateTree(customsmt.CreateContent(cont))
-	return customsmt.Strings(t)
+	root := customsmt.GetMerkleRoot(t)
+	s := hex.EncodeToString(root)
+	return customsmt.Strings(t), s
 }
 
-func GetMerkleRoot(c *gin.Context) {
-
+func GetMerkleRoot(c *gin.Context) string {
+	cont := getContent(c)
+	t := customsmt.CreateTree(customsmt.CreateContent(cont))
+	root := customsmt.GetMerkleRoot(t)
+	s := hex.EncodeToString(root)
+	return s
 }
 
 ////////////////////////////////////
@@ -57,9 +65,19 @@ func checkThatTreeIs(c *gin.Context) bool {
 	return tree.Having
 }
 
-//func rebuildTree(c *gin.Context) {
-//	println("rebuilding tree")
-//}
+func rebuildTree(c *gin.Context, content []string) {
+	db := c.MustGet("db").(*mgo.Database)
+	query := bson.M{"TreeId": TREE_ID}
+	content = append(content, c.Param("assets"))
+	var result bson.M
+	changeInDocument := mgo.Change{
+		Update: bson.M{"$set": bson.M{"TreeContent": content}},
+	}
+	_, err := db.C(models.CollectionTree).Find(query).Apply(changeInDocument, &result)
+	if err != nil {
+		println("rebuildTree mistake 1")
+	}
+}
 
 func createTreeContent(c *gin.Context) {
 	db := c.MustGet("db").(*mgo.Database)

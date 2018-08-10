@@ -19,16 +19,13 @@ func IntToKeccak(data int) []byte {
 	hash := solsha3.SoliditySHA3(
 		solsha3.String(strconv.FormatInt(int64(data), 10)),
 	)
-
 	return hash
 }
 
 func BytesToKeccak(data []byte) []byte {
-
 	hash := solsha3.SoliditySHA3(
 		solsha3.Bytes32(data),
 	)
-
 	return hash
 }
 

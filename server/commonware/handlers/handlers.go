@@ -12,12 +12,14 @@ import (
 
 type Proof struct {
 	HashProof string
+	FinalMerkleRoot string
 }
 type Proofs []Proof
 
 // Add new asset to assetId and change merkle tree
 func UpdateAssetId(c *gin.Context) {
 	assets.UpdateAssetsByAssetId(c)
+	tree.RebuildOrCreateTree(c)
 	defer assets.IncrementAssetTx(c)
 }
 
@@ -51,13 +53,13 @@ func GetSpecifiedProof(c *gin.Context) {
 
 // Get total Merkle proof
 func GetTotalProof(c *gin.Context) {
-	d := tree.GetTotalProof(c)
+	d, root := tree.GetTotalProof(c)
 	var proofs = Proofs{}
 	for i := 0; i < len(d); i++ {
 		var a = d[i]
 		proofs = append(proofs,
 			Proof{
-				a,
+				a, root,
 			})
 	}
 
