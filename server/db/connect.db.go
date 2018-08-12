@@ -14,24 +14,26 @@ var (
 
 	// Mongo stores the mongodb connection string information
 	Mongo *mgo.DialInfo
+
+	LOGIN_DB    = os.Getenv("LOGIN_DB")
+	PASSWORD_DB = os.Getenv("PASSWORD_DB")
+	IP          = os.Getenv("IP")
 )
 
-const (
-	// MongoDBUrl is the default mongodb url that will be used to connect to the
-	// database.
-	//
-	//MongoDBUrl = "mongodb://0.0.0.0:27017/demo"
-	MongoDBUrl = "mongodb://bankex2:ObshiDostup1@18.209.40.150:27017/admin"
-)
+//const (
+//// MongoDBUrl is the default mongodb url that will be used to connect to the
+//// database.
+////
+////MongoDBUrl = "mongodb://0.0.0.0:27017/demo"
+////MongoDBUrl = "mongodb://bankex2:ObshiDostup1@18.209.40.150:27017/admin"
+//)
 
 // Connect connects to mongodb
 func Connect() {
-	uri := os.Getenv(MongoDBUrl)
-
-	if len(uri) == 0 {
-		uri = MongoDBUrl
-	}
-
+	//println(LOGIN_DB, PASSWORD_DB, IP)
+	uri := ("mongodb://" + LOGIN_DB + ":" + PASSWORD_DB + "@" + IP + ":27017/"+"admin")
+	//println("Jpiwfhbiohwcoiuwbcouiwb!!!!!!!!!")
+	//println(uri)
 	mongo, err := mgo.ParseURL(uri)
 	s, err := mgo.Dial(uri)
 	if err != nil {

@@ -12,6 +12,12 @@ import (
 	"github.com/ethereum/go-ethereum/crypto"
 	"crypto/ecdsa"
 	"math/big"
+	"os"
+)
+
+var (
+	PVT_KEY     = os.Getenv("PVT_KEY")
+	CONTRACT_ADDRESS = os.Getenv("CONTRACT_ADDRESS")
 )
 
 func SendNewRootHash(rootHash []byte) {
@@ -20,7 +26,7 @@ func SendNewRootHash(rootHash []byte) {
 		log.Fatal(err)
 	}
 
-	privateKey, err := crypto.HexToECDSA("fb4346d4d7518c159c809f62fb6ab0152f7ca878bf7fddc056d6b02a3c917653")
+	privateKey, err := crypto.HexToECDSA(PVT_KEY)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -48,7 +54,7 @@ func SendNewRootHash(rootHash []byte) {
 	auth.GasLimit = uint64(300000) // in units
 	auth.GasPrice = gasPrice
 
-	address := common.HexToAddress("0x0293a80682dc2a192c683baf434dd67343cebf70")
+	address := common.HexToAddress(CONTRACT_ADDRESS)
 	instance, err := store.NewStore(address, client)
 	if err != nil {
 		log.Fatal(err)

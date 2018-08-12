@@ -5,7 +5,12 @@ import (
 	"./middlewares"
 	"./commonware/handlers"
 	"github.com/gin-gonic/gin"
+	"os"
 )
+
+var LOGIN = os.Getenv("LOGIN")
+var PASSWORD = os.Getenv("PASSWORD")
+
 
 func main() {
 
@@ -16,7 +21,7 @@ func main() {
 	r.Use(middlewares.Connect)
 	r.Use(middlewares.ErrorHandler)
 	a := r.Group("/a", gin.BasicAuth(gin.Accounts{
-		"bankex": "ObshiDostup1",
+		LOGIN: PASSWORD,
 	}))
 
 	a.POST("/new/:assetId/:assets", handlers.CreateAssetId)
