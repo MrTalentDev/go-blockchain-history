@@ -19,7 +19,9 @@ var (
 const (
 	// MongoDBUrl is the default mongodb url that will be used to connect to the
 	// database.
-	MongoDBUrl = "mongodb://localhost:27017/demo"
+	//
+	//MongoDBUrl = "mongodb://0.0.0.0:27017/demo"
+	MongoDBUrl = "mongodb://bankex2:ObshiDostup1@18.209.40.150:27017/admin"
 )
 
 // Connect connects to mongodb

@@ -24,7 +24,7 @@ func CheckAndReturn(c *gin.Context) ([]string, string) {
 }
 
 func GetAssetId(c *gin.Context) (string, error) {
-	db := c.MustGet("db").(*mgo.Database)
+	db := c.MustGet("test").(*mgo.Database)
 	query := bson.M{"assetId": c.Param("assetId")}
 	asset := models.Asset{}
 	err := c.Bind(&asset)
@@ -39,7 +39,7 @@ func GetAssetId(c *gin.Context) (string, error) {
 }
 
 func InitAsset(c *gin.Context) []string {
-	db := c.MustGet("db").(*mgo.Database)
+	db := c.MustGet("test").(*mgo.Database)
 	asset := models.Asset{}
 	assetId := c.Param("assetId")
 	assets := c.Param("assets")
@@ -66,7 +66,7 @@ func InitAsset(c *gin.Context) []string {
 }
 
 func FindALlAssets(c *gin.Context) []models.Asset {
-	db := c.MustGet("db").(*mgo.Database)
+	db := c.MustGet("test").(*mgo.Database)
 	assets := []models.Asset{}
 	err := db.C(models.CollectionAssets).Find(nil).All(&assets)
 	if err != nil {
@@ -76,7 +76,7 @@ func FindALlAssets(c *gin.Context) []models.Asset {
 }
 
 func GetAssetsByAssetById(c *gin.Context) map[string][]byte {
-	db := c.MustGet("db").(*mgo.Database)
+	db := c.MustGet("test").(*mgo.Database)
 	query := bson.M{"assetId": c.Param("assetId")}
 	asset := models.Asset{}
 	err := db.C(models.CollectionAssets).Find(query).One(&asset)
@@ -87,7 +87,7 @@ func GetAssetsByAssetById(c *gin.Context) map[string][]byte {
 }
 
 func UpdateAssetsByAssetId(c *gin.Context) {
-	db := c.MustGet("db").(*mgo.Database)
+	db := c.MustGet("test").(*mgo.Database)
 	query := bson.M{"assetId": c.Param("assetId")}
 	txNumber := getTxNumber(c)
 	txNumber++
@@ -106,7 +106,7 @@ func UpdateAssetsByAssetId(c *gin.Context) {
 
 // Returns incremented txNumber for assetId and safe it to db
 func IncrementAssetTx(c *gin.Context) {
-	db := c.MustGet("db").(*mgo.Database)
+	db := c.MustGet("test").(*mgo.Database)
 	query := bson.M{"assetId": c.Param("assetId")}
 	var result bson.M
 	changeInDocument := mgo.Change{
@@ -124,7 +124,7 @@ func IncrementAssetTx(c *gin.Context) {
 }
 
 func GetAssetByAssetIdAndTxNumber(c *gin.Context) []byte {
-	db := c.MustGet("db").(*mgo.Database)
+	db := c.MustGet("test").(*mgo.Database)
 	query := bson.M{"assetId": c.Param("assetId")}
 	var st string
 	st = c.Param("txNumber")
@@ -151,7 +151,7 @@ func GetAssetByAssetIdAndTxNumber(c *gin.Context) []byte {
 ////////////////////////////////////
 
 func getTxNumber(c *gin.Context) int64 {
-	db := c.MustGet("db").(*mgo.Database)
+	db := c.MustGet("test").(*mgo.Database)
 	query := bson.M{"assetId": c.Param("assetId")}
 	asset := models.Asset{}
 	err := db.C(models.CollectionAssets).Find(query).One(&asset)

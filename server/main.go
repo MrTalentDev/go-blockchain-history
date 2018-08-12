@@ -15,8 +15,12 @@ func main() {
 	r := gin.Default()
 	r.Use(middlewares.Connect)
 	r.Use(middlewares.ErrorHandler)
-	r.POST("/new/:assetId/:assets", handlers.CreateAssetId)
-	r.POST("/update/:assetId/:assets", handlers.UpdateAssetId)
+	a := r.Group("/a", gin.BasicAuth(gin.Accounts{
+		"bankex": "ObshiDostup1",
+	}))
+
+	a.POST("/new/:assetId/:assets", handlers.CreateAssetId)
+	a.POST("/update/:assetId/:assets", handlers.UpdateAssetId)
 	r.GET("/get/:assetId/:txNumber", handlers.GetData)
 	r.GET("/proof/:assets", handlers.GetSpecifiedProof)
 	r.GET("/proof", handlers.GetTotalProof)

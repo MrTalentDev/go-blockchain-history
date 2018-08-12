@@ -12,7 +12,7 @@ import (
 )
 
 type Proof struct {
-	HashProof string
+	HashProof       string
 	FinalMerkleRoot string
 }
 type Proofs []Proof
@@ -37,13 +37,14 @@ func CreateAssetId(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{
 		"assetId": id[0],
-		"hash": id[1],
+		"hash":    id[1],
 	})
 
 }
 
 // Lists all assets in DB
 func List(c *gin.Context) {
+
 	c.JSON(http.StatusOK, gin.H{
 		"assets": assets.FindALlAssets(c),
 	})

@@ -18,7 +18,8 @@ func Connect(c *gin.Context) {
 
 	defer s.Close()
 
-	c.Set("db", s.DB(db.Mongo.Database))
+	//c.Set("db", s.DB(db.Mongo.Database))
+	c.Set("test", s.DB(db.Mongo.Database))
 	c.Next()
 }
 

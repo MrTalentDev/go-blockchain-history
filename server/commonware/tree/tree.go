@@ -52,7 +52,7 @@ func GetMerkleRoot(c *gin.Context) []byte {
 const TREE_ID = "1"
 
 func checkThatTreeIs(c *gin.Context) bool {
-	db := c.MustGet("db").(*mgo.Database)
+	db := c.MustGet("test").(*mgo.Database)
 	query := bson.M{"TreeId": TREE_ID}
 	tree := models.Tree{}
 	err := db.C(models.CollectionTree).Find(query).One(&tree)
@@ -64,7 +64,7 @@ func checkThatTreeIs(c *gin.Context) bool {
 }
 
 func rebuildTree(c *gin.Context, content []string) {
-	db := c.MustGet("db").(*mgo.Database)
+	db := c.MustGet("test").(*mgo.Database)
 	query := bson.M{"TreeId": TREE_ID}
 	content = append(content, c.Param("assets"))
 	var result bson.M
@@ -78,7 +78,7 @@ func rebuildTree(c *gin.Context, content []string) {
 }
 
 func createTreeContent(c *gin.Context) {
-	db := c.MustGet("db").(*mgo.Database)
+	db := c.MustGet("test").(*mgo.Database)
 	var m []string
 	m = append(m, c.Param("assets"))
 	tree := models.Tree{}
@@ -87,14 +87,19 @@ func createTreeContent(c *gin.Context) {
 	tree.TreeContent = m
 	err := db.C(models.CollectionTree).Insert(tree)
 	if err != nil {
+		println("createTreeContent mistake 1")
 		println(err)
 	}
 }
 
 func getContent(c *gin.Context) []string {
-	db := c.MustGet("db").(*mgo.Database)
+	db := c.MustGet("test").(*mgo.Database)
 	query := bson.M{"TreeId": TREE_ID}
 	tree := models.Tree{}
-	db.C(models.CollectionTree).Find(query).One(&tree)
+	err := db.C(models.CollectionTree).Find(query).One(&tree)
+	if err != nil {
+		println("getContent mistake 1")
+		println(err)
+	}
 	return tree.TreeContent
 }
