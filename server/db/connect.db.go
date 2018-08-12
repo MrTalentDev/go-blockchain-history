@@ -31,7 +31,7 @@ var (
 // Connect connects to mongodb
 func Connect() {
 	//println(LOGIN_DB, PASSWORD_DB, IP)
-	uri := ("mongodb://" + LOGIN_DB + ":" + PASSWORD_DB + "@" + IP + ":27017/"+"admin")
+	uri := ("mongodb://" + LOGIN_DB + ":" + PASSWORD_DB + "@" + IP + ":27017/" + "admin")
 	//println("Jpiwfhbiohwcoiuwbcouiwb!!!!!!!!!")
 	//println(uri)
 	mongo, err := mgo.ParseURL(uri)

@@ -16,7 +16,7 @@ import (
 )
 
 var (
-	PVT_KEY     = os.Getenv("PVT_KEY")
+	PVT_KEY          = os.Getenv("PVT_KEY")
 	CONTRACT_ADDRESS = os.Getenv("CONTRACT_ADDRESS")
 )
 

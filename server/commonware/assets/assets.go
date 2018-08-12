@@ -12,15 +12,15 @@ import (
 	"encoding/hex"
 )
 
-func CheckAndReturn(c *gin.Context) ([]string, string) {
+func CheckAndReturn(c *gin.Context) ([]string, string, bool) {
 	_, err := GetAssetId(c)
 	if err == nil {
 		c.JSON(200, gin.H{
 			"Answer": "This assetId is already created",
 		})
-		return nil, "err"
+		return nil, "err", false
 	}
-	return InitAsset(c), ""
+	return InitAsset(c), "", true
 }
 
 func GetAssetId(c *gin.Context) (string, error) {

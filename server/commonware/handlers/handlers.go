@@ -28,18 +28,20 @@ func UpdateAssetId(c *gin.Context) {
 
 // Create new assetId with asset
 func CreateAssetId(c *gin.Context) {
-	id, er := assets.CheckAndReturn(c)
-	tree.RebuildOrCreateTree(c)
-	root := tree.GetMerkleRoot(c)
-	web3history.SendNewRootHash(root)
-	if er == "err" {
+	id, er, try := assets.CheckAndReturn(c)
+	if try {
+		tree.RebuildOrCreateTree(c)
+		root := tree.GetMerkleRoot(c)
+		web3history.SendNewRootHash(root)
+		if er == "err" {
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"assetId": id[0],
+			"hash":    id[1],
+		})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{
-		"assetId": id[0],
-		"hash":    id[1],
-	})
-
 }
 
 // Lists all assets in DB
