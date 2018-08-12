@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"../assets"
 	"../tree"
+	"../../ethercrypto/web3history"
 	"net/http"
 	"encoding/hex"
 	"log"
@@ -20,6 +21,8 @@ type Proofs []Proof
 func UpdateAssetId(c *gin.Context) {
 	assets.UpdateAssetsByAssetId(c)
 	tree.RebuildOrCreateTree(c)
+	root := tree.GetMerkleRoot(c)
+	web3history.SendNewRootHash(root)
 	defer assets.IncrementAssetTx(c)
 }
 
@@ -27,6 +30,8 @@ func UpdateAssetId(c *gin.Context) {
 func CreateAssetId(c *gin.Context) {
 	id, er := assets.CheckAndReturn(c)
 	tree.RebuildOrCreateTree(c)
+	root := tree.GetMerkleRoot(c)
+	web3history.SendNewRootHash(root)
 	if er == "err" {
 		return
 	}

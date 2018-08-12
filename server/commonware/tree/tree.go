@@ -39,12 +39,10 @@ func GetTotalProof(c *gin.Context) ([]string, string) {
 	return customsmt.Strings(t), s
 }
 
-func GetMerkleRoot(c *gin.Context) string {
+func GetMerkleRoot(c *gin.Context) []byte {
 	cont := getContent(c)
 	t := customsmt.CreateTree(customsmt.CreateContent(cont))
-	root := customsmt.GetMerkleRoot(t)
-	s := hex.EncodeToString(root)
-	return s
+	return customsmt.GetMerkleRoot(t)
 }
 
 ////////////////////////////////////
@@ -61,7 +59,7 @@ func checkThatTreeIs(c *gin.Context) bool {
 	if err != nil {
 		println("checkThatTreeIs mistake 1", err)
 	}
-	println(tree.Having)
+	//println(tree.Having)
 	return tree.Having
 }
 
