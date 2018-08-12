@@ -11,6 +11,14 @@ services:
           memory: 150M
       restart_policy:
         condition: on-failure
+      args:
+        PVT_KEY: 'ask_for_it'
+        CONTRACT_ADDRESS: 'ask_for_it'
+        LOGIN_DB: 'ask_for_it'
+        PASSWORD_DB: 'ask_for_it'
+        IP: 'ask_for_it'
+        LOGIN: 'ask_for_it'
+        PASSWORD: 'ask_for_it'
     ports:
     - "8080:8080"
     - "27017:27017"
