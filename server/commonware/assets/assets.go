@@ -12,6 +12,9 @@ import (
 	"encoding/hex"
 )
 
+//CheckAndReturn goes to mgo and check if there is an Asset Id
+//if there is no assetId it calls InitAsset
+//returns (asset.ID, asset.Hash) + error (string type), result of checking (bool)
 func CheckAndReturn(c *gin.Context) ([]string, string, bool) {
 	_, err := GetAssetId(c)
 	if err == nil {
@@ -23,6 +26,7 @@ func CheckAndReturn(c *gin.Context) ([]string, string, bool) {
 	return InitAsset(c), "", true
 }
 
+//GetAssetId returns assetId it it exists
 func GetAssetId(c *gin.Context) (string, error) {
 	db := c.MustGet("test").(*mgo.Database)
 	query := bson.M{"assetId": c.Param("assetId")}
@@ -38,6 +42,7 @@ func GetAssetId(c *gin.Context) (string, error) {
 	return asset.AssetId, nil
 }
 
+//InitAsset creates new asset Id with pending asset
 func InitAsset(c *gin.Context) []string {
 	db := c.MustGet("test").(*mgo.Database)
 	asset := models.Asset{}
@@ -65,6 +70,7 @@ func InitAsset(c *gin.Context) []string {
 	return a
 }
 
+//FindALlAssets returns all assets in mgo
 func FindALlAssets(c *gin.Context) []models.Asset {
 	db := c.MustGet("test").(*mgo.Database)
 	assets := []models.Asset{}
@@ -75,6 +81,7 @@ func FindALlAssets(c *gin.Context) []models.Asset {
 	return assets
 }
 
+//GetAssetsByAssetById returns all assets by id
 func GetAssetsByAssetById(c *gin.Context) map[string][]byte {
 	db := c.MustGet("test").(*mgo.Database)
 	query := bson.M{"assetId": c.Param("assetId")}
@@ -86,6 +93,7 @@ func GetAssetsByAssetById(c *gin.Context) map[string][]byte {
 	return asset.Assets
 }
 
+//UpdateAssetsByAssetId allow to add new asset to assetId
 func UpdateAssetsByAssetId(c *gin.Context) {
 	db := c.MustGet("test").(*mgo.Database)
 	query := bson.M{"assetId": c.Param("assetId")}
@@ -123,6 +131,7 @@ func IncrementAssetTx(c *gin.Context) {
 	})
 }
 
+//GetAssetByAssetIdAndTxNumber returns asset by it's assetId and txNumber
 func GetAssetByAssetIdAndTxNumber(c *gin.Context) []byte {
 	db := c.MustGet("test").(*mgo.Database)
 	query := bson.M{"assetId": c.Param("assetId")}
@@ -146,10 +155,7 @@ func GetAssetByAssetIdAndTxNumber(c *gin.Context) []byte {
 	return m[stringTx]
 }
 
-////////////////////////////////////
-//////// Internal functions ////////
-////////////////////////////////////
-
+//getTxNumber returns last txNumber of assetId
 func getTxNumber(c *gin.Context) int64 {
 	db := c.MustGet("test").(*mgo.Database)
 	query := bson.M{"assetId": c.Param("assetId")}

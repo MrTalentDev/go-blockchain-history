@@ -9,6 +9,9 @@ import (
 	"encoding/hex"
 )
 
+//RebuildOrCreateTree check's if there is any tree exists
+//if it exists - rebuild it
+//if not - create it
 func RebuildOrCreateTree(c *gin.Context) {
 	res := checkThatTreeIs(c)
 	switch res {
@@ -21,6 +24,7 @@ func RebuildOrCreateTree(c *gin.Context) {
 
 }
 
+//GetSpecificProof return a proof for specific content
 func GetSpecificProof(c *gin.Context) bool {
 	cont := getContent(c)
 	t := customsmt.CreateTree(customsmt.CreateContent(cont))
@@ -31,6 +35,7 @@ func GetSpecificProof(c *gin.Context) bool {
 	return res
 }
 
+//GetTotalProof returns a total proof for all assets
 func GetTotalProof(c *gin.Context) ([]string, string) {
 	cont := getContent(c)
 	t := customsmt.CreateTree(customsmt.CreateContent(cont))
@@ -39,15 +44,12 @@ func GetTotalProof(c *gin.Context) ([]string, string) {
 	return customsmt.Strings(t), s
 }
 
+//GetMerkleRoot returns main merkle root for the tree
 func GetMerkleRoot(c *gin.Context) []byte {
 	cont := getContent(c)
 	t := customsmt.CreateTree(customsmt.CreateContent(cont))
 	return customsmt.GetMerkleRoot(t)
 }
-
-////////////////////////////////////
-//////// Internal functions ////////
-////////////////////////////////////
 
 const TREE_ID = "1"
 

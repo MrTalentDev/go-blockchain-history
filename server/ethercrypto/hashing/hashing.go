@@ -5,6 +5,7 @@ import (
 	"strconv"
 )
 
+//StringToKeccak converts string to Kecckak hash of Ethereum
 func StringToKeccak(data string) []byte {
 
 	hash := solsha3.SoliditySHA3(
@@ -14,6 +15,7 @@ func StringToKeccak(data string) []byte {
 	return hash
 }
 
+//IntToKeccak converts int to Kecckak hash of Ethereum
 func IntToKeccak(data int) []byte {
 
 	hash := solsha3.SoliditySHA3(
@@ -22,6 +24,7 @@ func IntToKeccak(data int) []byte {
 	return hash
 }
 
+//BytesToKeccak converts byte to Kecckak hash of Ethereum
 func BytesToKeccak(data []byte) []byte {
 	hash := solsha3.SoliditySHA3(
 		solsha3.Bytes32(data),
@@ -29,6 +32,7 @@ func BytesToKeccak(data []byte) []byte {
 	return hash
 }
 
+//CellCreation create a specific cell
 func CellCreation(assetID int, txNumber int) []byte {
 
 	a := IntToKeccak(txNumber)

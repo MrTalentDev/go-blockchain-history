@@ -24,6 +24,7 @@ func (t TestContent) Equals(other smerkletree.Content) (bool, error) {
 	return t.X == other.(TestContent).X, nil
 }
 
+//CreateContent make a serialized content for tree
 func CreateContent(content []string) []smerkletree.Content {
 	var list []smerkletree.Content
 	for i := 0; i < len(content); i++ {
@@ -32,6 +33,7 @@ func CreateContent(content []string) []smerkletree.Content {
 	return list
 }
 
+//CreateTree make a tree and returns a pointer at memory
 func CreateTree(list []smerkletree.Content) (*smerkletree.MerkleTree) {
 	//Create a new Merkle Tree from the list of Content
 	t, err := smerkletree.NewTree(list)
@@ -41,15 +43,18 @@ func CreateTree(list []smerkletree.Content) (*smerkletree.MerkleTree) {
 	return t
 }
 
+//RewriteTree remake a tree
 func RewriteTree(content []smerkletree.Content, tree *smerkletree.MerkleTree) {
 	tree.RebuildTreeWith(content)
 	//tree.RebuildTree()
 }
 
+//GetMerkleRoot returns a merkle root of the tree
 func GetMerkleRoot(tree *smerkletree.MerkleTree) []byte {
 	return tree.MerkleRoot()
 }
 
+//VerifySpecificLeaf verify specific content
 func VerifySpecificLeaf(tree *smerkletree.MerkleTree, content smerkletree.Content) bool {
 	res, err := tree.VerifyContent(content)
 	if err != nil {
@@ -58,10 +63,12 @@ func VerifySpecificLeaf(tree *smerkletree.MerkleTree, content smerkletree.Conten
 	return res
 }
 
+//ShowLeafs show all the merkle tree leafs
 func ShowLeafs(tree *smerkletree.MerkleTree) string {
 	return tree.String()
 }
 
+//VerifyAll proof all the data of the tree
 func VerifyAll(tree *smerkletree.MerkleTree) bool {
 	res, err := tree.VerifyTree()
 	if err != nil {
@@ -70,9 +77,12 @@ func VerifyAll(tree *smerkletree.MerkleTree) bool {
 	return res
 }
 
+//Hashes returns all the data from tree
 func Hashes(tree *smerkletree.MerkleTree) []string {
 	return tree.GetHash()
 }
+
+//Strings show all hashes in string type
 func Strings(tree *smerkletree.MerkleTree) []string {
 	return tree.Strings()
 }

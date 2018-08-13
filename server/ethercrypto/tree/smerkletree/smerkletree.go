@@ -256,6 +256,7 @@ func (m *MerkleTree) String() string {
 	return s
 }
 
+//Returns all tree hashes
 func (m *MerkleTree) GetHash() []string {
 	var s []string
 	for _, l := range m.Leafs {
@@ -264,6 +265,7 @@ func (m *MerkleTree) GetHash() []string {
 	return s
 }
 
+//Returns merkle root and leaf
 func ReturnTree(m *MerkleTree) ([]byte, []*Node) {
 	return m.merkleRoot, m.Leafs
 }
@@ -271,7 +273,7 @@ func ReturnTree(m *MerkleTree) ([]byte, []*Node) {
 //func (n *Node) stringHash() string {
 //	return hex.EncodeToString(n.Hash)
 //}
-
+//Strings returns string type of hash of every leaf
 func (m *MerkleTree) Strings() []string {
 	var s []string
 	for _, l := range m.Leafs {
