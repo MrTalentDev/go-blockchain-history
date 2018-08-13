@@ -1,3 +1,5 @@
+## About
+This is on open source project which aims to make easy solution with timestamping data on blockchain
 
 ## About ENV 
 
