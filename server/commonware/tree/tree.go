@@ -105,3 +105,5 @@ func getContent(c *gin.Context) []string {
 	}
 	return tree.TreeContent
 }
+
+//TODO make it work with DB without memory at all
