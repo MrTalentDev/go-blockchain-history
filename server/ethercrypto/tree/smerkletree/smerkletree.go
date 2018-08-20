@@ -204,6 +204,16 @@ func (m *MerkleTree) VerifyTree() (bool, error) {
 
 //VerifyContent indicates whether a given content is in the tree and the hashes are valid for that content.
 //Returns true if the expected Merkle Root is equivalent to the Merkle root calculated on the critical path
+////for a given content. Returns true if valid and false otherwise.
+//func (m *MerkleTree) VerifySpecProof(content Content) ([]uint, []byte) {
+//	var nullUint uint
+//	var array256 []uint
+//
+//
+//}
+
+//VerifyContent indicates whether a given content is in the tree and the hashes are valid for that content.
+//Returns true if the expected Merkle Root is equivalent to the Merkle root calculated on the critical path
 //for a given content. Returns true if valid and false otherwise.
 func (m *MerkleTree) VerifyContent(content Content) (bool, error) {
 	for _, l := range m.Leafs {
@@ -273,6 +283,7 @@ func ReturnTree(m *MerkleTree) ([]byte, []*Node) {
 //func (n *Node) stringHash() string {
 //	return hex.EncodeToString(n.Hash)
 //}
+
 //Strings returns string type of hash of every leaf
 func (m *MerkleTree) Strings() []string {
 	var s []string

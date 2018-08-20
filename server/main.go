@@ -11,7 +11,6 @@ import (
 var LOGIN = os.Getenv("LOGIN")
 var PASSWORD = os.Getenv("PASSWORD")
 
-
 func main() {
 
 	// mongo init
@@ -20,12 +19,14 @@ func main() {
 	r := gin.Default()
 	r.Use(middlewares.Connect)
 	r.Use(middlewares.ErrorHandler)
+
 	a := r.Group("/a", gin.BasicAuth(gin.Accounts{
 		LOGIN: PASSWORD,
 	}))
-
+	
 	a.POST("/new/:assetId/:assets", handlers.CreateAssetId)
 	a.POST("/update/:assetId/:assets", handlers.UpdateAssetId)
+
 	r.GET("/get/:assetId/:txNumber", handlers.GetData)
 	r.GET("/proof/:assets", handlers.GetSpecifiedProof)
 	r.GET("/proof", handlers.GetTotalProof)
