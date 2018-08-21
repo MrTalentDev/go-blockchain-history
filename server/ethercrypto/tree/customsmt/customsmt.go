@@ -4,28 +4,34 @@ import (
 	"log"
 	"../smerkletree"
 	"github.com/miguelmota/go-solidity-sha3"
+	"bytes"
 )
 
 //TestContent implements the Content interface provided by merkletree and represents the content stored in the tree.
 type TestContent struct {
-	X string
+	X []byte
 }
 
 //CalculateHashBytes hashes the values of a TestContent
 func (t TestContent) CalculateHashBytes() ([]byte, error) {
 	hash := solsha3.SoliditySHA3(
-		solsha3.String(t.X),
+		solsha3.Bytes32(t.X),
 	)
 	return hash, nil
 }
 
+//Init hashes the values of a TestContent
+func (t TestContent) Init() ([]byte) {
+	return t.X
+}
+
 //Equals tests for equality of two Contents
 func (t TestContent) Equals(other smerkletree.Content) (bool, error) {
-	return t.X == other.(TestContent).X, nil
+	return bytes.Equal(t.X, other.(TestContent).X), nil
 }
 
 //CreateContent make a serialized content for tree
-func CreateContent(content []string) []smerkletree.Content {
+func CreateContent(content [][]byte) []smerkletree.Content {
 	var list []smerkletree.Content
 	for i := 0; i < len(content); i++ {
 		list = append(list, TestContent{X: content[i]})
@@ -63,10 +69,6 @@ func VerifySpecificLeaf(tree *smerkletree.MerkleTree, content smerkletree.Conten
 	return res
 }
 
-//ShowLeafs show all the merkle tree leafs
-func ShowLeafs(tree *smerkletree.MerkleTree) string {
-	return tree.String()
-}
 
 //VerifyAll proof all the data of the tree
 func VerifyAll(tree *smerkletree.MerkleTree) bool {
@@ -77,10 +79,6 @@ func VerifyAll(tree *smerkletree.MerkleTree) bool {
 	return res
 }
 
-//Hashes returns all the data from tree
-func Hashes(tree *smerkletree.MerkleTree) []string {
-	return tree.GetHash()
-}
 
 //Strings show all hashes in string type
 func Strings(tree *smerkletree.MerkleTree) []string {

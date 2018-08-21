@@ -26,6 +26,19 @@ func CheckAndReturn(c *gin.Context) ([]string, string, bool) {
 	return InitAsset(c), "", true
 }
 
+//Check
+func Check(c *gin.Context) (bool) {
+	_, err := GetAssetId(c)
+	if err == nil {
+		return true
+	} else {
+		c.JSON(200, gin.H{
+			"Answer": "This assetId is not created",
+		})
+		return false
+	}
+}
+
 //GetAssetId returns assetId it it exists
 func GetAssetId(c *gin.Context) (string, error) {
 	db := c.MustGet("test").(*mgo.Database)
@@ -47,13 +60,16 @@ func InitAsset(c *gin.Context) []string {
 	db := c.MustGet("test").(*mgo.Database)
 	asset := models.Asset{}
 	assetId := c.Param("assetId")
-	assets := c.Param("assets")
+	assets := c.Param("hash")
 	asset.AssetId = assetId
 	asset.CreatedOn = time.Now().UnixNano() / int64(time.Millisecond)
 	asset.UpdatedOn = asset.CreatedOn
 	asset.Hash = hashing.StringToKeccak(assetId)
 	m := make(map[string][]byte)
-	m["0"] = hashing.StringToKeccak(assets)
+	data, _ := hex.DecodeString(assets)
+	m["0"] = data
+	println(m["0"])
+	println(hex.EncodeToString(m["0"]))
 	asset.Assets = m
 	err := c.Bind(&asset)
 	if err != nil {
@@ -101,7 +117,9 @@ func UpdateAssetsByAssetId(c *gin.Context) {
 	txNumber++
 	stringTx := strconv.FormatInt(txNumber, 10)
 	m := GetAssetsByAssetById(c)
-	m[stringTx] = hashing.StringToKeccak(c.Param("assets"))
+	data, _ := hex.DecodeString(c.Param("hash"))
+
+	m[stringTx] = data
 	var result bson.M
 	changeInDocument := mgo.Change{
 		Update: bson.M{"$set": bson.M{"updated_on": time.Now().UnixNano() / int64(time.Millisecond), "assets": m}},

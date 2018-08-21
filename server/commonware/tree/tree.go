@@ -24,17 +24,6 @@ func RebuildOrCreateTree(c *gin.Context) {
 
 }
 
-//GetSpecificProof return a proof for specific content
-func GetSpecificProof(c *gin.Context) bool {
-	cont := getContent(c)
-	t := customsmt.CreateTree(customsmt.CreateContent(cont))
-	var m []string
-	m = append(m, c.Param("assets"))
-	conts := customsmt.CreateContent(m)
-	res, _ := t.VerifyContent(conts[0])
-	return res
-}
-
 //GetTotalProof returns a total proof for all assets
 func GetTotalProof(c *gin.Context) ([]string, string) {
 	cont := getContent(c)
@@ -65,10 +54,11 @@ func checkThatTreeIs(c *gin.Context) bool {
 	return tree.Having
 }
 
-func rebuildTree(c *gin.Context, content []string) {
+func rebuildTree(c *gin.Context, content [][]byte) {
 	db := c.MustGet("test").(*mgo.Database)
 	query := bson.M{"TreeId": TREE_ID}
-	content = append(content, c.Param("assets"))
+	data, _ := hex.DecodeString(c.Param("hash"))
+	content = append(content, data)
 	var result bson.M
 	changeInDocument := mgo.Change{
 		Update: bson.M{"$set": bson.M{"TreeContent": content}},
@@ -81,8 +71,9 @@ func rebuildTree(c *gin.Context, content []string) {
 
 func createTreeContent(c *gin.Context) {
 	db := c.MustGet("test").(*mgo.Database)
-	var m []string
-	m = append(m, c.Param("assets"))
+	var m [][]byte
+	data, _ := hex.DecodeString(c.Param("hash"))
+	m = append(m, data)
 	tree := models.Tree{}
 	tree.Having = true
 	tree.TreeId = TREE_ID
@@ -94,7 +85,7 @@ func createTreeContent(c *gin.Context) {
 	}
 }
 
-func getContent(c *gin.Context) []string {
+func getContent(c *gin.Context) [][]byte {
 	db := c.MustGet("test").(*mgo.Database)
 	query := bson.M{"TreeId": TREE_ID}
 	tree := models.Tree{}

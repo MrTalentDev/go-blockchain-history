@@ -6,7 +6,6 @@ package smerkletree
 import (
 	"bytes"
 	"errors"
-	"fmt"
 	"github.com/miguelmota/go-solidity-sha3"
 	"encoding/hex"
 )
@@ -14,6 +13,7 @@ import (
 //Content represents the data that is stored and verified by the tree. A type that
 //implements this interface can be used as an item in the tree.
 type Content interface {
+	Init() []byte
 	CalculateHashBytes() ([]byte, error)
 	Equals(other Content) (bool, error)
 }
@@ -96,10 +96,7 @@ func BuildWithContent(cs []Content) (*Node, []*Node, error) {
 	}
 	var leafs []*Node
 	for _, c := range cs {
-		hash, err := c.CalculateHashBytes()
-		if err != nil {
-			return nil, nil, err
-		}
+		hash := c.Init()
 
 		leafs = append(leafs, &Node{
 			Hash: hash,
@@ -223,15 +220,15 @@ func (m *MerkleTree) VerifyContent(content Content) (bool, error) {
 		}
 		if ok {
 			currentParent := l.Parent
-			println(hex.EncodeToString(currentParent.Hash), "ONEEE")
+
 			for currentParent != nil {
 				rightBytes, err := currentParent.Right.calculateNodeHash()
-				println(hex.EncodeToString(rightBytes), "TWOO")
+
 				if err != nil {
 					return false, err
 				}
 				leftBytes, err := currentParent.Left.calculateNodeHash()
-				println(hex.EncodeToString(leftBytes), "THREEE")
+
 				if err != nil {
 					return false, err
 				}
@@ -240,13 +237,13 @@ func (m *MerkleTree) VerifyContent(content Content) (bool, error) {
 						return false, nil
 					}
 					currentParent = currentParent.Parent
-					println("FOURR")
+
 				} else {
 					if bytes.Compare(solsha3.SoliditySHA3(solsha3.Bytes32(append(leftBytes, rightBytes...)), ), currentParent.Hash) != 0 {
 						return false, nil
 					}
 					currentParent = currentParent.Parent
-					println("FIVEEEE")
+
 				}
 			}
 			return true, nil
@@ -254,35 +251,6 @@ func (m *MerkleTree) VerifyContent(content Content) (bool, error) {
 	}
 	return false, nil
 }
-
-//String returns a string representation of the tree. Only leaf nodes are included
-//in the output.
-func (m *MerkleTree) String() string {
-	s := ""
-	for _, l := range m.Leafs {
-		s += fmt.Sprint(l)
-		s += "\n"
-	}
-	return s
-}
-
-//Returns all tree hashes
-func (m *MerkleTree) GetHash() []string {
-	var s []string
-	for _, l := range m.Leafs {
-		s = append(s, hex.EncodeToString(l.Hash))
-	}
-	return s
-}
-
-//Returns merkle root and leaf
-func ReturnTree(m *MerkleTree) ([]byte, []*Node) {
-	return m.merkleRoot, m.Leafs
-}
-
-//func (n *Node) stringHash() string {
-//	return hex.EncodeToString(n.Hash)
-//}
 
 //Strings returns string type of hash of every leaf
 func (m *MerkleTree) Strings() []string {

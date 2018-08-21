@@ -9,21 +9,28 @@ import (
 	"encoding/hex"
 	"log"
 	"encoding/json"
+	"strconv"
 )
 
 type Proof struct {
-	HashProof       string
-	FinalMerkleRoot string
+	Number    string
+	Hash      string
+	MerkleRoot string
 }
 type Proofs []Proof
 
 //UpdateAssetId Add new asset to assetId and change merkle tree
 func UpdateAssetId(c *gin.Context) {
-	assets.UpdateAssetsByAssetId(c)
-	tree.RebuildOrCreateTree(c)
-	root := tree.GetMerkleRoot(c)
-	web3history.SendNewRootHash(root)
-	defer assets.IncrementAssetTx(c)
+	if assets.Check(c) {
+		assets.UpdateAssetsByAssetId(c)
+		tree.RebuildOrCreateTree(c)
+		root := tree.GetMerkleRoot(c)
+		web3history.SendNewRootHash(root)
+		defer assets.IncrementAssetTx(c)
+	} else {
+
+	}
+
 }
 
 //CreateAssetId Create new assetId with asset
@@ -46,16 +53,8 @@ func CreateAssetId(c *gin.Context) {
 
 //List Lists all assets in DB
 func List(c *gin.Context) {
-
 	c.JSON(http.StatusOK, gin.H{
 		"assets": assets.FindALlAssets(c),
-	})
-}
-
-//GetSpecifiedProof Get Merkle proof of specified asset
-func GetSpecifiedProof(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
-		"result": tree.GetSpecificProof(c),
 	})
 }
 
@@ -63,11 +62,12 @@ func GetSpecifiedProof(c *gin.Context) {
 func GetTotalProof(c *gin.Context) {
 	d, root := tree.GetTotalProof(c)
 	var proofs = Proofs{}
-	for i := 0; i < len(d); i++ {
+	var i int
+	for i = 0; i < len(d); i++ {
 		var a = d[i]
 		proofs = append(proofs,
 			Proof{
-				a, root,
+				strconv.FormatInt(int64(i), 10),a, root,
 			})
 	}
 

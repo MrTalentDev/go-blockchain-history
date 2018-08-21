@@ -24,11 +24,11 @@ func main() {
 		LOGIN: PASSWORD,
 	}))
 	
-	a.POST("/new/:assetId/:assets", handlers.CreateAssetId)
-	a.POST("/update/:assetId/:assets", handlers.UpdateAssetId)
+	a.POST("/new/:assetId/:hash", handlers.CreateAssetId)
+	a.POST("/update/:assetId/:hash", handlers.UpdateAssetId)
 
 	r.GET("/get/:assetId/:txNumber", handlers.GetData)
-	r.GET("/proof/:assets", handlers.GetSpecifiedProof)
+
 	r.GET("/proof", handlers.GetTotalProof)
 	r.GET("/list", handlers.List)
 	r.Run() // listen and serve on 0.0.0.0:8080
