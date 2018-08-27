@@ -29,7 +29,8 @@ func main() {
 
 	r.GET("/get/:assetId/:txNumber", handlers.GetData)
 
-	r.GET("/proof", handlers.GetTotalProof)
+	r.GET("/proof/:assetId/:txNumber/:hash", handlers.GetTotalProof)
 	r.GET("/list", handlers.List)
-	r.Run() // listen and serve on 0.0.0.0:8080
+	r.Static("/assets", "./assets")
+	r.Run(":80") // listen and serve on 0.0.0.0:8080
 }

@@ -68,8 +68,8 @@ func InitAsset(c *gin.Context) []string {
 	m := make(map[string][]byte)
 	data, _ := hex.DecodeString(assets)
 	m["0"] = data
-	println(m["0"])
-	println(hex.EncodeToString(m["0"]))
+	//println(m["0"])
+	//println(hex.EncodeToString(m["0"]))
 	asset.Assets = m
 	err := c.Bind(&asset)
 	if err != nil {
@@ -82,7 +82,7 @@ func InitAsset(c *gin.Context) []string {
 	}
 	var a []string
 	a = append(a, asset.AssetId)
-	a = append(a, hex.EncodeToString(asset.Hash))
+	a = append(a, hex.EncodeToString(data))
 	return a
 }
 
@@ -113,7 +113,7 @@ func GetAssetsByAssetById(c *gin.Context) map[string][]byte {
 func UpdateAssetsByAssetId(c *gin.Context) {
 	db := c.MustGet("test").(*mgo.Database)
 	query := bson.M{"assetId": c.Param("assetId")}
-	txNumber := getTxNumber(c)
+	txNumber := GetTxNumber(c)
 	txNumber++
 	stringTx := strconv.FormatInt(txNumber, 10)
 	m := GetAssetsByAssetById(c)
@@ -130,7 +130,7 @@ func UpdateAssetsByAssetId(c *gin.Context) {
 	}
 }
 
-// Returns incremented txNumber for assetId and safe it to db
+// Returns incremented txNumber for assetId and save it to db
 func IncrementAssetTx(c *gin.Context) {
 	db := c.MustGet("test").(*mgo.Database)
 	query := bson.M{"assetId": c.Param("assetId")}
@@ -173,8 +173,8 @@ func GetAssetByAssetIdAndTxNumber(c *gin.Context) []byte {
 	return m[stringTx]
 }
 
-//getTxNumber returns last txNumber of assetId
-func getTxNumber(c *gin.Context) int64 {
+//GetTxNumber returns last txNumber of assetId
+func GetTxNumber(c *gin.Context) int64 {
 	db := c.MustGet("test").(*mgo.Database)
 	query := bson.M{"assetId": c.Param("assetId")}
 	asset := models.Asset{}

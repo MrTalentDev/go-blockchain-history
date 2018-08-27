@@ -2,7 +2,6 @@ package hashing
 
 import (
 	"github.com/miguelmota/go-solidity-sha3"
-	"strconv"
 )
 
 //StringToKeccak converts string to Kecckak hash of Ethereum
@@ -16,10 +15,10 @@ func StringToKeccak(data string) []byte {
 }
 
 //IntToKeccak converts int to Kecckak hash of Ethereum
-func IntToKeccak(data int) []byte {
+func IntToKeccak(data int64) []byte {
 
 	hash := solsha3.SoliditySHA3(
-		solsha3.String(strconv.FormatInt(int64(data), 10)),
+		solsha3.String(data),
 	)
 	return hash
 }
@@ -33,13 +32,15 @@ func BytesToKeccak(data []byte) []byte {
 }
 
 //CellCreation create a specific cell
-func CellCreation(assetID int, txNumber int) []byte {
+func CellCreation(assetID string, txNumber int64) []byte {
 
-	a := IntToKeccak(txNumber)
+	a := solsha3.SoliditySHA3(
+		solsha3.Int64(txNumber),
+	)
 
 	b := solsha3.SoliditySHA3(
 		solsha3.Bytes32(a),
-		solsha3.String(strconv.FormatInt(int64(assetID), 10)),
+		solsha3.String(assetID),
 	)
 
 	c := solsha3.SoliditySHA3(

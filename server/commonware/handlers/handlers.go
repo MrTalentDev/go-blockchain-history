@@ -3,19 +3,18 @@ package handlers
 import (
 	"github.com/gin-gonic/gin"
 	"../assets"
-	"../tree"
+	"../tree/tree"
+	"../tree/content"
 	"../../ethercrypto/web3history"
 	"net/http"
 	"encoding/hex"
 	"log"
 	"encoding/json"
-	"strconv"
 )
 
 type Proof struct {
-	Number    string
-	Hash      string
-	MerkleRoot string
+	//Number string
+	Hash   string
 }
 type Proofs []Proof
 
@@ -23,29 +22,32 @@ type Proofs []Proof
 func UpdateAssetId(c *gin.Context) {
 	if assets.Check(c) {
 		assets.UpdateAssetsByAssetId(c)
-		tree.RebuildOrCreateTree(c)
-		root := tree.GetMerkleRoot(c)
+		tx := assets.GetTxNumber(c)
+		tx++
+		content.AddContent(c, tx)
+		root := tree.GetRoot(c)
 		web3history.SendNewRootHash(root)
 		defer assets.IncrementAssetTx(c)
 	} else {
-
 	}
-
 }
 
 //CreateAssetId Create new assetId with asset
 func CreateAssetId(c *gin.Context) {
 	id, er, try := assets.CheckAndReturn(c)
 	if try {
-		tree.RebuildOrCreateTree(c)
-		root := tree.GetMerkleRoot(c)
+		tx := assets.GetTxNumber(c)
+		content.AddContent(c, tx)
+		root := tree.GetRoot(c)
 		web3history.SendNewRootHash(root)
 		if er == "err" {
 			return
 		}
 		c.JSON(http.StatusOK, gin.H{
-			"assetId": id[0],
-			"hash":    id[1],
+			"assetId":    id[0],
+			"txNumber":   tx,
+			"hash":       id[1],
+			"merkleRoot": hex.EncodeToString(root),
 		})
 		return
 	}
@@ -60,14 +62,12 @@ func List(c *gin.Context) {
 
 //GetTotalProof Get total Merkle proof
 func GetTotalProof(c *gin.Context) {
-	d, root := tree.GetTotalProof(c)
+	d := tree.GetProofs(c)
 	var proofs = Proofs{}
-	var i int
-	for i = 0; i < len(d); i++ {
-		var a = d[i]
+	for i := 0; i < len(d); i++ {
 		proofs = append(proofs,
 			Proof{
-				strconv.FormatInt(int64(i), 10),a, root,
+				hex.EncodeToString(d[i]),
 			})
 	}
 
