@@ -14,14 +14,14 @@ import (
 
 type Proof struct {
 	//Number string
-	Hash string
+	Hash []byte
 }
 type Proofs []Proof
 
 type Info struct {
-	Key  string
-	Hash string
-	Root string
+	Key  []byte
+	Hash []byte
+	Root []byte
 }
 
 type TotalValues struct {
@@ -78,7 +78,7 @@ func GetTotalProof(c *gin.Context) {
 	for i := 0; i < len(d); i++ {
 		proofs = append(proofs,
 			Proof{
-				hex.EncodeToString(d[i]),
+				d[i],
 			})
 	}
 

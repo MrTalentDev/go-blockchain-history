@@ -16,7 +16,7 @@ func GetRoot(c *gin.Context) []byte {
 	return t.Root()
 }
 
-func GetProofs(c *gin.Context) ([][]byte, string, string, string) {
+func GetProofs(c *gin.Context) ([][]byte, []byte, []byte, []byte) {
 	st := c.Param("txNumber")
 	hash := c.Param("hash")
 	dataHash, _ := hex.DecodeString(hash)
@@ -36,7 +36,7 @@ func GetProofs(c *gin.Context) ([][]byte, string, string, string) {
 		fmt.Println("Proof verification failed.")
 	}
 	r := GetRoot(c)
-	return proofs, key, hash, hex.EncodeToString(r)
+	return proofs, d, dataHash, r
 }
 
 func makeTree(c *gin.Context, contents map[string][]byte) *smt.SparseMerkleTree {
