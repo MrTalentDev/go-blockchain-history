@@ -64,3 +64,11 @@ function getHash(data) {
     const web3 = new Web3();
     return web3.utils.keccak256(data);
 }
+
+function tryN() {
+    var s = sort()
+    key = "d298be85487e0f453736b6b4a5634d09cc08790493e03941a699d0444d1ee1e4";
+    hash = "96e75810b7fe519dd92f6a3f72170b00c0a8a9553f9c765a3cc681eaf7eeab38";
+    root = "4101c0157600045fdf8dcb8e8a78c5891606bd596a7c497b5e9091ca08f9dc6d";
+    verifyProof(s, key, hash, root)
+}

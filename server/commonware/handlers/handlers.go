@@ -14,9 +14,20 @@ import (
 
 type Proof struct {
 	//Number string
-	Hash   string
+	Hash string
 }
 type Proofs []Proof
+
+type Info struct {
+	Key  string
+	Hash string
+	Root string
+}
+
+type TotalValues struct {
+	Data Proofs
+	Info Info
+}
 
 //UpdateAssetId Add new asset to assetId and change merkle tree
 func UpdateAssetId(c *gin.Context) {
@@ -62,7 +73,7 @@ func List(c *gin.Context) {
 
 //GetTotalProof Get total Merkle proof
 func GetTotalProof(c *gin.Context) {
-	d := tree.GetProofs(c)
+	d, key, data, root := tree.GetProofs(c)
 	var proofs = Proofs{}
 	for i := 0; i < len(d); i++ {
 		proofs = append(proofs,
@@ -71,7 +82,18 @@ func GetTotalProof(c *gin.Context) {
 			})
 	}
 
-	myJson, err := json.Marshal(proofs)
+	var info = Info{}
+	info.Key = key
+	info.Root = root
+	info.Hash = data
+
+	var final = TotalValues{}
+
+	final.Info = info
+	final.Data = proofs
+
+	myJson, err := json.Marshal(final)
+
 	if err != nil {
 		log.Fatal("Cannot encode to JSON ", err)
 	}

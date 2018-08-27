@@ -31,6 +31,7 @@ func AddContent(c *gin.Context, txNumber int64) {
 
 func CreateKey(c *gin.Context, txNumber int64) string {
 	key := hex.EncodeToString(hashing.CellCreation(c.Param("assetId"), txNumber))
+	println(key)
 	return key
 }
 
