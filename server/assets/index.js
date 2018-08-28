@@ -174,7 +174,6 @@ class PoA {
      * @return {*} Hash of data
      */
     getHash(data) {
-        const web3 = new Web3();
         return web3.utils.keccak256(data);
     }
 
@@ -203,8 +202,8 @@ class PoA {
     }
 }
 
+const p = new PoA();
 async function main() {
-    const p = new PoA();
     try {
         const data = await p.getFile();
         document.getElementById('file-error').innerText = '';
@@ -215,3 +214,20 @@ async function main() {
         document.getElementById('file-error').innerText = e.message;
     }
 }
+
+function getCell(assetId, txNumber) {
+    const a = getHash(txNumber);
+    const b = getHash(assetId);
+    const concatArray = concatUint8Arrays(a,b);
+    const key = getHash("0x" + Uint8ArrayToHex(concatArray));
+    return "0x" + Uint8ArrayToHex(key);
+}
+
+// function getCell1(assetId, txNumber) {
+//     const a = p.getHash(txNumber);
+//     const b = p.getHash(assetId);
+//     return p.getHash(a + b.substring(2))
+// }
+
+
+
