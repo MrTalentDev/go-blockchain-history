@@ -8,14 +8,14 @@ import (
 	"../../ethercrypto/web3history"
 	"net/http"
 	"encoding/hex"
-	"log"
 	"encoding/json"
 	"strconv"
+	"log"
 )
 
 type Proof struct {
 	//Number string
-	Hash []byte
+	Hash string
 }
 type Proofs []Proof
 
@@ -84,7 +84,7 @@ func GetTotalProof(c *gin.Context) {
 	for i := 0; i < len(d); i++ {
 		proofs = append(proofs,
 			Proof{
-				d[i],
+				hex.EncodeToString(d[i]),
 			})
 	}
 

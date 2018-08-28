@@ -48,3 +48,10 @@ func CellCreation(assetID string, txNumber int64) []byte {
 
 	return c
 }
+//
+//func Test(hashOne []byte, hashTwo []byte) []byte {
+//	c := solsha3.SoliditySHA3(
+//		hashOne, hashTwo,
+//	)
+//	return c
+//}

@@ -34,6 +34,7 @@ func GetProofs(c *gin.Context) ([][]byte, []byte, []byte, []byte) {
 	proofs, _ := t.Prove(d)
 	defer Proof(proofs, t.Root(), m[key], d)
 	r := GetRoot(c)
+	//Check(proofs, c)
 	return proofs, d, dataHash, r
 }
 
@@ -44,6 +45,34 @@ func Proof(proofs [][]byte, root []byte, value []byte, key []byte) {
 		fmt.Println("Proof verification failed.")
 	}
 }
+
+//type Info struct {
+//	Key []byte
+//}
+//
+//func checkSum(hashOne []byte, hashTwo []byte)  []byte {
+//	hasher:= sha3.NewKeccak256()
+//	hasher.Write(hashOne)
+//	hasher.Write(hashTwo)
+//	path := hasher.Sum(nil)
+//	hasher.Reset()
+//	return path
+//}
+//
+//func Check(proofs [][]byte, c *gin.Context) {
+//	d := checkSum(proofs[0], proofs[1])
+//
+//	var info = Info{}
+//	info.Key = d
+//
+//	myJson, err := json.Marshal(info)
+//
+//	if err != nil {
+//		log.Fatal("Cannot encode to JSON ", err)
+//	}
+//
+//	c.Data(http.StatusOK, "JSON", myJson)
+//}
 
 func makeTree(c *gin.Context, contents map[string][]byte) *smt.SparseMerkleTree {
 	t := customsmt.InitTree()
