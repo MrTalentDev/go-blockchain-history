@@ -6,10 +6,10 @@ const right = 1;
 function verify(assetId, txNumber, data, timestamp) {
     const response = getData(assetId, txNumber, data, timestamp);
     const proof = response.Data;
-    const key = response.Info.Key;
-    const hash = response.Info.Hash;
-    const root = response.Info.Root;
-    const verify = verifyProof(proof, key.substring(2), hash.substring(2), root.substring(2));
+    const key = Base64toHEX(response.Info.Key);
+    const hash = Base64toHEX(response.Info.Hash);
+    const root = Base64toHEX(response.Info.Root);
+    const verify = verifyProof(proof, key, hash, root);
     return verify;
 }
 
@@ -45,7 +45,7 @@ function verifyProof(proof, key, data, root) {
         return false;
 
     for (let i = 255; i >= 0; i--) {
-        const node = HexToUint8Array(proof[i].Hash.substring(2));
+        const node = Base64ToBinary(proof[i].Hash);
         if (node.length != 32)
             return false;
         let newArray;
