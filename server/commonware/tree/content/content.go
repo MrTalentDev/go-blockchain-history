@@ -16,8 +16,6 @@ func AddContent(c *gin.Context, txNumber int64, timestamp int64) {
 		key := CreateKey(c, txNumber)
 		updateKey(c, key)
 		content := GenContent(c, timestamp)
-		println("CONTENT")
-		println(hex.EncodeToString(content))
 		updateContent(c, key, content)
 	} else {
 		m := make(map[string][]byte)
@@ -33,14 +31,14 @@ func AddContent(c *gin.Context, txNumber int64, timestamp int64) {
 
 func CreateKey(c *gin.Context, txNumber int64) string {
 	key := hex.EncodeToString(hashing.CellCreation(c.Param("assetId"), txNumber))
-	println("WHAT IS KEY")
-	println((key))
+	println("KEY")
+	println(key)
 	return key
 }
 
 func GenContent(c *gin.Context, timestamp int64) []byte {
 	hash := hashing.CellCreation(c.Param("hash"), timestamp)
-	println("WHAT IS GENERATING")
+	println("CONTENT HASH")
 	println(hex.EncodeToString(hash))
 	return hash
 }
