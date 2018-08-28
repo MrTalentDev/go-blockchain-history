@@ -21,9 +21,9 @@ function verify(assetId, txNumber, data, timestamp) {
  * @param timestamp {string} Time of adding data
  * @returns {Object}
  */
-function getData(assetId, txNumber, data) {
+function getData(assetId, txNumber, data, timestamp) {
     const xmlHttp = new XMLHttpRequest();
-    xmlHttp.open("GET", "/proof"+"/"+ assetId +"/"+ txNumber +"/"+ data, false); // false for synchronous request
+    xmlHttp.open("GET", "/proof"+"/"+ assetId +"/"+ txNumber +"/"+ data + "/" + timestamp, false); // false for synchronous request
     xmlHttp.send(null);
     return JSON.parse(xmlHttp.responseText);
 }
