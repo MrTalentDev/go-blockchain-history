@@ -41,7 +41,7 @@ function verifyProof(proof, key, data, root) {
     const keyHash = getHash("0x"+key);
     let dataHash = getHash("0x"+data);
 
-    if (data.length != 256)
+    if (proof.length != 256)
         return false;
 
     for (let i = 255; i >= 0; i--) {
