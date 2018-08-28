@@ -8,21 +8,21 @@ import (
 	"../../ethercrypto/web3history"
 	"net/http"
 	"encoding/hex"
-	"log"
 	"encoding/json"
 	"strconv"
+	"log"
 )
 
 type Proof struct {
 	//Number string
-	Hash []byte
+	Hash string
 }
 type Proofs []Proof
 
 type Info struct {
-	Key  []byte
-	Hash []byte
-	Root []byte
+	Key  string
+	Hash string
+	Root string
 }
 
 type TotalValues struct {
@@ -84,14 +84,14 @@ func GetTotalProof(c *gin.Context) {
 	for i := 0; i < len(d); i++ {
 		proofs = append(proofs,
 			Proof{
-				d[i],
+				"0x" + hex.EncodeToString(d[i]),
 			})
 	}
 
 	var info = Info{}
-	info.Key = key
-	info.Root = root
-	info.Hash = data
+	info.Key = "0x" + hex.EncodeToString(key)
+	info.Root = "0x" + hex.EncodeToString(root)
+	info.Hash = "0x" + hex.EncodeToString(data)
 
 	var final = TotalValues{}
 
