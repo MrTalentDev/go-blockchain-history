@@ -88,7 +88,6 @@ function getHash(data) {
  * Allows to convert base64 string into hex string
  * @param base64 {string} base64 data
  * @returns {string} hex data
- * @constructor
  */
 function Base64toHEX(base64) {
     const raw = window.atob(base64);
