@@ -10,6 +10,7 @@ import (
 	"encoding/hex"
 	"log"
 	"encoding/json"
+	"strconv"
 )
 
 type Proof struct {
@@ -32,13 +33,13 @@ type TotalValues struct {
 //UpdateAssetId Add new asset to assetId and change merkle tree
 func UpdateAssetId(c *gin.Context) {
 	if assets.Check(c) {
-		assets.UpdateAssetsByAssetId(c)
+		timing := assets.UpdateAssetsByAssetId(c)
 		tx := assets.GetTxNumber(c)
 		tx++
-		content.AddContent(c, tx)
+		content.AddContent(c, tx, timing)
 		root := tree.GetRoot(c)
 		web3history.SendNewRootHash(root)
-		defer assets.IncrementAssetTx(c)
+		defer assets.IncrementAssetTx(c, timing)
 	} else {
 	}
 }
@@ -48,7 +49,11 @@ func CreateAssetId(c *gin.Context) {
 	id, er, try := assets.CheckAndReturn(c)
 	if try {
 		tx := assets.GetTxNumber(c)
-		content.AddContent(c, tx)
+		timestamp, err := strconv.Atoi(id[2])
+		if err != nil {
+			panic(err)
+		}
+		content.AddContent(c, tx, int64(timestamp))
 		root := tree.GetRoot(c)
 		web3history.SendNewRootHash(root)
 		if er == "err" {
@@ -57,6 +62,7 @@ func CreateAssetId(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"assetId":    id[0],
 			"txNumber":   tx,
+			"timstamp":   id[2],
 			"hash":       id[1],
 			"merkleRoot": hex.EncodeToString(root),
 		})

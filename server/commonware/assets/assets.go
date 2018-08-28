@@ -58,19 +58,24 @@ func GetAssetId(c *gin.Context) (string, error) {
 //InitAsset creates new asset Id with pending asset
 func InitAsset(c *gin.Context) []string {
 	db := c.MustGet("test").(*mgo.Database)
+	timing := time.Now().UnixNano() / int64(time.Millisecond)
 	asset := models.Asset{}
 	assetId := c.Param("assetId")
 	assets := c.Param("hash")
 	asset.AssetId = assetId
-	asset.CreatedOn = time.Now().UnixNano() / int64(time.Millisecond)
+	asset.CreatedOn = timing
 	asset.UpdatedOn = asset.CreatedOn
 	asset.Hash = hashing.StringToKeccak(assetId)
+	//asset.AssetTimeStamp = time.Now().UnixNano() / int64(time.Millisecond)
 	m := make(map[string][]byte)
+	timstamp := make(map[string]int64)
 	data, _ := hex.DecodeString(assets)
 	m["0"] = data
+	timstamp["0"] = timing
 	//println(m["0"])
 	//println(hex.EncodeToString(m["0"]))
 	asset.Assets = m
+	asset.AssetTimeStamp = timstamp
 	err := c.Bind(&asset)
 	if err != nil {
 		println("InitAsset mistake 1")
@@ -83,6 +88,7 @@ func InitAsset(c *gin.Context) []string {
 	var a []string
 	a = append(a, asset.AssetId)
 	a = append(a, hex.EncodeToString(data))
+	a = append(a, strconv.Itoa(int(timing)))
 	return a
 }
 
@@ -110,7 +116,7 @@ func GetAssetsByAssetById(c *gin.Context) map[string][]byte {
 }
 
 //UpdateAssetsByAssetId allow to add new asset to assetId
-func UpdateAssetsByAssetId(c *gin.Context) {
+func UpdateAssetsByAssetId(c *gin.Context) int64 {
 	db := c.MustGet("test").(*mgo.Database)
 	query := bson.M{"assetId": c.Param("assetId")}
 	txNumber := GetTxNumber(c)
@@ -118,20 +124,23 @@ func UpdateAssetsByAssetId(c *gin.Context) {
 	stringTx := strconv.FormatInt(txNumber, 10)
 	m := GetAssetsByAssetById(c)
 	data, _ := hex.DecodeString(c.Param("hash"))
-
 	m[stringTx] = data
+	timstamp := GetTimestamp(c)
+	timing := time.Now().UnixNano() / int64(time.Millisecond)
+	timstamp[stringTx] = timing
 	var result bson.M
 	changeInDocument := mgo.Change{
-		Update: bson.M{"$set": bson.M{"updated_on": time.Now().UnixNano() / int64(time.Millisecond), "assets": m}},
+		Update: bson.M{"$set": bson.M{"updated_on": timing, "assets": m, "assetsTimestamp": timstamp}},
 	}
 	_, err := db.C(models.CollectionAssets).Find(query).Apply(changeInDocument, &result)
 	if err != nil {
 		println("UpdateAssetsByAssetId mistake 1")
 	}
+	return timing
 }
 
 // Returns incremented txNumber for assetId and save it to db
-func IncrementAssetTx(c *gin.Context) {
+func IncrementAssetTx(c *gin.Context, timestamp int64) {
 	db := c.MustGet("test").(*mgo.Database)
 	query := bson.M{"assetId": c.Param("assetId")}
 	var result bson.M
@@ -146,6 +155,8 @@ func IncrementAssetTx(c *gin.Context) {
 	newID := result["txNumber"]
 	c.JSON(http.StatusOK, gin.H{
 		"txNumber": newID,
+		"timestamp": timestamp,
+		"assetId": result["assetId"],
 	})
 }
 
@@ -183,4 +194,15 @@ func GetTxNumber(c *gin.Context) int64 {
 		println("tx mistake 2")
 	}
 	return asset.TxNumber
+}
+//GetTxNumber returns last txNumber of assetId
+func GetTimestamp(c *gin.Context) map[string]int64 {
+	db := c.MustGet("test").(*mgo.Database)
+	query := bson.M{"assetId": c.Param("assetId")}
+	asset := models.Asset{}
+	err := db.C(models.CollectionAssets).Find(query).One(&asset)
+	if err != nil {
+		println("tx mistake 2")
+	}
+	return asset.AssetTimeStamp
 }

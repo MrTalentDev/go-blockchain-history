@@ -6,9 +6,9 @@ import (
 	"../content"
 	"github.com/gin-gonic/gin"
 	"encoding/hex"
+	"strconv"
 	"github.com/ethereum/go-ethereum/crypto/sha3"
 	"fmt"
-	"strconv"
 )
 
 func GetRoot(c *gin.Context) []byte {
@@ -18,25 +18,31 @@ func GetRoot(c *gin.Context) []byte {
 
 func GetProofs(c *gin.Context) ([][]byte, []byte, []byte, []byte) {
 	st := c.Param("txNumber")
-	hash := c.Param("hash")
-	dataHash, _ := hex.DecodeString(hash)
+	tp := c.Param("timestamp")
+	timestamp, err := strconv.Atoi(tp)
+	dataHash := content.GenContent(c, int64(timestamp))
 	m := make(map[string][]byte)
+
 	txNumber, err := strconv.ParseInt(st, 10, 64)
 	if err != nil {
 		println(err)
 	}
 	key := content.CreateKey(c, txNumber)
 	m[key] = dataHash
-	t := makeTree(c, m)
+	t := makeTree(c, content.GetAllContent(c))
 	d, _ := hex.DecodeString(key)
 	proofs, _ := t.Prove(d)
-	if smt.VerifyProof(proofs, t.Root(), d, m[key], sha3.NewKeccak256()) {
+	defer Proof(proofs, t.Root(), m[key], d)
+	r := GetRoot(c)
+	return proofs, d, dataHash, r
+}
+
+func Proof(proofs [][]byte, root []byte, value []byte, key []byte) {
+	if smt.VerifyProof(proofs, root, key, value, sha3.NewKeccak256()) {
 		fmt.Println("Proof verification succeeded.")
 	} else {
 		fmt.Println("Proof verification failed.")
 	}
-	r := GetRoot(c)
-	return proofs, d, dataHash, r
 }
 
 func makeTree(c *gin.Context, contents map[string][]byte) *smt.SparseMerkleTree {

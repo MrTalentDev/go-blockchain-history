@@ -11,19 +11,21 @@ import (
 
 const TREE_ID = "1"
 
-func AddContent(c *gin.Context, txNumber int64) {
+func AddContent(c *gin.Context, txNumber int64, timestamp int64) {
 	if checkContent(c) {
 		key := CreateKey(c, txNumber)
 		updateKey(c, key)
-		d, _ := hex.DecodeString(c.Param("hash"))
-		updateContent(c, key, d)
+		content := GenContent(c, timestamp)
+		println("CONTENT")
+		println(hex.EncodeToString(content))
+		updateContent(c, key, content)
 	} else {
 		m := make(map[string][]byte)
 		key:= CreateKey(c, txNumber)
 		var keys []string
 		keys = append(keys, key)
-		d, _ := hex.DecodeString(c.Param("hash"))
-		m[key] = d
+		content := GenContent(c, timestamp)
+		m[key] = content
 		createContent(c, keys, m)
 	}
 
@@ -31,8 +33,16 @@ func AddContent(c *gin.Context, txNumber int64) {
 
 func CreateKey(c *gin.Context, txNumber int64) string {
 	key := hex.EncodeToString(hashing.CellCreation(c.Param("assetId"), txNumber))
-	println(key)
+	println("WHAT IS KEY")
+	println((key))
 	return key
+}
+
+func GenContent(c *gin.Context, timestamp int64) []byte {
+	hash := hashing.CellCreation(c.Param("hash"), timestamp)
+	println("WHAT IS GENERATING")
+	println(hex.EncodeToString(hash))
+	return hash
 }
 
 func GetAllKeys(c *gin.Context) []string {
@@ -75,10 +85,6 @@ func updateKey(c *gin.Context, newKey string) {
 func updateContent(c *gin.Context, newKey string, newContent []byte) {
 	content := GetAllContent(c)
 	content[newKey] = newContent
-
-	// TODO: REMOVE
-	//println("content current:")
-	//println(content[newKey])
 	db := c.MustGet("test").(*mgo.Database)
 	query := bson.M{"TreeId": TREE_ID}
 	var result bson.M
@@ -93,9 +99,6 @@ func updateContent(c *gin.Context, newKey string, newContent []byte) {
 
 func createContent(c *gin.Context, key []string, content map[string][]byte) {
 	db := c.MustGet("test").(*mgo.Database)
-	// TODO: REMOVE
-	//println("content current:")
-	//println(content[key[0]])
 	tree := models.Tree{}
 	tree.TreeContent = content
 	tree.TreeKeys = key
