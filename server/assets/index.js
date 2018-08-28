@@ -9,7 +9,7 @@ function verify(assetId, txNumber, data, timestamp) {
     const key = response.Info.Key;
     const hash = response.Info.Hash;
     const root = response.Info.Root;
-    const verify = verifyProof(proof.substring(2), key.substring(2), hash.substring(2), root.substring(2));
+    const verify = verifyProof(proof, key.substring(2), hash.substring(2), root.substring(2));
     return verify;
 }
 
