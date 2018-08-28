@@ -1,3 +1,5 @@
+const web3 = new Web3();
+
 const left = 0;
 const right = 1;
 
