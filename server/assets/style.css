@@ -116,3 +116,11 @@ ul.timeline > li:before {
     text-transform: capitalize;
     text-align: center;
 }
+
+.Proofs {
+    max-height: 500px !important;
+    top: 10px;
+    left: 10px;
+    bottom: 10px;
+    overflow-y: scroll;
+}

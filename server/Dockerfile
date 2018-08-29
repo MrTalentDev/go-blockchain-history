@@ -16,13 +16,13 @@ RUN go get github.com/ethereum/go-ethereum/event
 RUN go get github.com/ethereum/go-ethereum/ethclient
 RUN go get github.com/ethereum/go-ethereum/crypto
 
-ENV PVT_KEY=fb4346d4d7518c159c809f62fb6ab0152f7ca878bf7fddc056d6b02a3c917653
-ENV CONTRACT_ADDRESS=0x0293a80682dc2a192c683baf434dd67343cebf70
-ENV LOGIN_DB=bankex2
-ENV PASSWORD_DB=ObshiDostup1
-ENV IP=18.209.40.150
-ENV LOGIN=bankex
-ENV PASSWORD=ObshiDostup1
+#ENV PVT_KEY=
+#ENV CONTRACT_ADDRESS=
+#ENV LOGIN_DB=
+#ENV PASSWORD_DB=
+#ENV IP=
+#ENV LOGIN=
+#ENV PASSWORD=
 
 RUN go build -o main .
 
