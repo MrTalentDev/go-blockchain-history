@@ -4,25 +4,20 @@ services:
     # replace username/repo:tag with your name and image details
     image: erage/server
     deploy:
-      replicas: 30
+      replicas: 10
       resources:
         limits:
-          cpus: "0.2"
+          cpus: "0.1"
           memory: 150M
       restart_policy:
         condition: on-failure
-      args:
-        PVT_KEY: 'ask_for_it'
-        CONTRACT_ADDRESS: 'ask_for_it'
-        LOGIN_DB: 'ask_for_it'
-        PASSWORD_DB: 'ask_for_it'
-        IP: 'ask_for_it'
-        LOGIN: 'ask_for_it'
-        PASSWORD: 'ask_for_it'
     ports:
     - "8080:8080"
     - "27017:27017"
     networks:
     - webnet
+
 networks:
   webnet:
+
+
