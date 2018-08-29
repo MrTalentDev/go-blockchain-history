@@ -15,14 +15,14 @@ import (
 
 type Proof struct {
 	//Number string
-	Hash string
+	Hash []byte
 }
 type Proofs []Proof
 
 type Info struct {
-	Key  string
-	Hash string
-	Root string
+	Key  []byte
+	Hash []byte
+	Root []byte
 }
 
 type TotalValues struct {
@@ -64,7 +64,7 @@ func CreateAssetId(c *gin.Context) {
 			"txNumber":   tx,
 			"timstamp":   id[2],
 			"hash":       id[1],
-			"merkleRoot": hex.EncodeToString(root),
+			"merkleRoot": root,
 		})
 		return
 	}
@@ -84,14 +84,14 @@ func GetTotalProof(c *gin.Context) {
 	for i := 0; i < len(d); i++ {
 		proofs = append(proofs,
 			Proof{
-				"0x" + hex.EncodeToString(d[i]),
+				 d[i],
 			})
 	}
 
 	var info = Info{}
-	info.Key = "0x" + hex.EncodeToString(key)
-	info.Root = "0x" + hex.EncodeToString(root)
-	info.Hash = "0x" + hex.EncodeToString(data)
+	info.Key = key
+	info.Root = root
+	info.Hash = data
 
 	var final = TotalValues{}
 
