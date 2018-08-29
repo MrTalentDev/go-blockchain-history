@@ -17,6 +17,7 @@ RUN go get github.com/ethereum/go-ethereum/ethclient
 RUN go get github.com/ethereum/go-ethereum/crypto
 
 
+
 RUN go build -o main .
 
 EXPOSE 8080
