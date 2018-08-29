@@ -26,7 +26,7 @@ ul.timeline > li {
 }
 
 ul.timeline > li:before {
-    content: ' ';
+    content: '  ';
     background: white;
     display: inline-block;
     position: absolute;

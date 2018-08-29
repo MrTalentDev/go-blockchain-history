@@ -23,7 +23,7 @@ function verify(assetId, txNumber, data, timestamp) {
  */
 function getData(assetId, txNumber, data, timestamp) {
     const xmlHttp = new XMLHttpRequest();
-    xmlHttp.open("GET", "/proof"+"/"+ assetId +"/"+ txNumber +"/"+ data + "/" + timestamp, false); // false for synchronous request
+    xmlHttp.open("GET", "/proof" + "/" + assetId + "/" + txNumber + "/" + data + "/" + timestamp, false); // false for synchronous request
     xmlHttp.send(null);
     return JSON.parse(xmlHttp.responseText);
 }
@@ -38,8 +38,8 @@ function getData(assetId, txNumber, data, timestamp) {
  */
 function verifyProof(proof, key, data, root) {
     const rootHash = HexToUint8Array(root);
-    const keyHash = getHash("0x"+key);
-    let dataHash = getHash("0x"+data);
+    const keyHash = getHash("0x" + key);
+    let dataHash = getHash("0x" + data);
 
     if (proof.length != 256)
         return false;
@@ -202,6 +202,7 @@ class PoA {
 }
 
 const p = new PoA();
+
 async function main() {
     try {
         const data = await p.getFile();
@@ -217,7 +218,7 @@ async function main() {
 function getCell(assetId, txNumber) {
     const a = getHash(txNumber);
     const b = getHash(assetId);
-    const concatArray = concatUint8Arrays(a,b);
+    const concatArray = concatUint8Arrays(a, b);
     const key = getHash("0x" + Uint8ArrayToHex(concatArray));
     return "0x" + Uint8ArrayToHex(key);
 }
