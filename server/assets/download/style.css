@@ -1,0 +1,126 @@
+body > h1 {
+    font-family: 'Roboto', sans-serif;
+}
+
+ul.timeline {
+    list-style-type: none;
+    position: relative;
+}
+
+ul.timeline:before {
+    content: ' ';
+    background: #d4d9df;
+    display: inline-block;
+    position: absolute;
+    left: 29px;
+    width: 2px;
+    height: 100%;
+    z-index: 400;
+}
+
+ul.timeline > li {
+
+    margin: 150px 0;
+    padding-left: 60px;
+    padding-bottom: 10px;
+}
+
+ul.timeline > li:before {
+    content: '  ';
+    background: white;
+    display: inline-block;
+    position: absolute;
+    border-radius: 50%;
+    border: 3px solid #22c0e8;
+    left: -18px;
+    width: 100px;
+    height: 100px;
+    z-index: 400;
+}
+
+.Asker {
+    color: #00bbe8;
+}
+
+.table {
+    background-color: #fff;
+    box-shadow: 0px 2px 2px #aaa;
+    margin-top: 50px;
+}
+
+.form-control {
+    border-radius: 0px;
+    border: 2px solid #00bbe8;
+}
+
+.btn {
+    border-radius: 0px;
+}
+
+.files input {
+    outline: 2px dashed #92b0b3;
+    outline-offset: -10px;
+    -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear;
+    transition: outline-offset .15s ease-in-out, background-color .15s linear;
+    padding: 120px 0px 85px 35%;
+    text-align: center !important;
+    margin: 0;
+    width: 100% !important;
+}
+
+.files input:focus {
+    outline: 2px dashed #92b0b3;
+    outline-offset: -10px;
+    -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear;
+    transition: outline-offset .15s ease-in-out, background-color .15s linear;
+    border: 1px solid #92b0b3;
+}
+
+.files {
+    position: relative
+}
+
+.files:after {
+    pointer-events: none;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 50px;
+    right: 0;
+    height: 56px;
+    content: "";
+    background-image: url(https://image.flaticon.com/icons/png/128/109/109612.png);
+    display: block;
+    margin: 0 auto;
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+
+.color input {
+    background-color: #f1f1f1;
+}
+
+.files:before {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    pointer-events: none;
+    width: 100%;
+    right: 0;
+    height: 57px;
+    content: " or drag it here. ";
+    display: block;
+    margin: 0 auto;
+    color: #2ea591;
+    font-weight: 600;
+    text-transform: capitalize;
+    text-align: center;
+}
+
+.Proofs {
+    max-height: 500px !important;
+    top: 10px;
+    left: 10px;
+    bottom: 10px;
+    overflow-y: scroll;
+}

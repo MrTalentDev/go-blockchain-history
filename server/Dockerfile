@@ -16,13 +16,6 @@ RUN go get github.com/ethereum/go-ethereum/event
 RUN go get github.com/ethereum/go-ethereum/ethclient
 RUN go get github.com/ethereum/go-ethereum/crypto
 
-#ENV PVT_KEY=
-#ENV CONTRACT_ADDRESS=
-#ENV LOGIN_DB=
-#ENV PASSWORD_DB=
-#ENV IP=
-#ENV LOGIN=
-#ENV PASSWORD=
 
 RUN go build -o main .
 
