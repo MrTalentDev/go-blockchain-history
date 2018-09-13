@@ -38,6 +38,7 @@ Client can send file to Product server and download it. Product server can send 
 **Description:** Allow to create new AssetID with Hash. 
 
 **Return:** JSON Ok
+
 ```
 {
    "assetId": Id of current asset chaid
@@ -59,6 +60,7 @@ Client can send file to Product server and download it. Product server can send 
 **Example:** http://localhost:8080/a/new/testAsset/0293a80682dc2a192c683baf434dd67343cedd70
 
 ---
+
 **POST:**
 /update/:assetId/:hash
 Allow to add new asset to assetId. Returns txNumber of this hash, timesamp
