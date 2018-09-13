@@ -29,6 +29,30 @@ Product server - server with DB which push merkle hash of assets to Blockchain s
 
 Client can send file to Product server and download it. Product server can send file to client and send a Merklee Proof to client. Client can verify data with provided merkle proof.
 
+## Backend handlers 
+
+POST:
+/new/:assetId/:hash 
+Allow to create new AssetID with Hash. 
+
+Return JSON with Error context if not OK (For example: "assetId is already created")
+
+POST:
+/update/:assetId/:hash
+Allow to add new asset to assetId. Returns txNumber of this hash, timesamp
+
+GET
+/get/:assetId/:txNumber
+Return asset hash by assetId and txNumber
+
+GET
+/proof/:assetId/:txNumber/:hash/:timestamp
+Return list of merkle proofs
+
+GET
+/list
+Return all assets info
+
 
 
 ## About ENV 
