@@ -16,6 +16,8 @@ Proove:
 6) check that merkle proof is correct ( it's a function with inputs: Hash file, timestamp file, assetId, txNumber - all these parameters client at the beggining)
 7) if merkle proof is correct - than all is OK 
 
+![image](https://raw.githubusercontent.com/BANKEX/poa-history/master/docs/info.svg?sanitize=true)
+
 
 ## Architecture 
 
