@@ -33,11 +33,11 @@ Client can send file to Product server and download it. Product server can send 
 
 **POST:**
 
-Route: a/new/:assetId/:hash 
+**Route:** a/new/:assetId/:hash 
 
-Description: Allow to create new AssetID with Hash. 
+**Description:** Allow to create new AssetID with Hash. 
 
-Return: JSON with parameters
+**Return:** JSON with parameters
 
 "assetId": Id of current asset chaid
 "hash": hash of file what we've got from product server
@@ -45,9 +45,9 @@ Return: JSON with parameters
 "timestamp": UNIX format time when server got hash of file
 "txNumber": Number of asset from assetId
 
-Return: JSON with Error context if not OK (For example: "assetId is already created")
+**Return:** JSON with Error context if not OK (For example: "assetId is already created")
 
-Example: http://localhost:8080/a/new/testAsset/0293a80682dc2a192c683baf434dd67343cedd70
+**Example:** http://localhost:8080/a/new/testAsset/0293a80682dc2a192c683baf434dd67343cedd70
 
 ---
 **POST:**
