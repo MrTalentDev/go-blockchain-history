@@ -38,12 +38,15 @@ Client can send file to Product server and download it. Product server can send 
 **Description:** Allow to create new AssetID with Hash. 
 
 **Return:** JSON with parameters
-
-"assetId": Id of current asset chaid
-"hash": hash of file what we've got from product server
-"merkleRoot": root of merkle tree at Ethereum
-"timestamp": UNIX format time when server got hash of file
-"txNumber": Number of asset from assetId
+```
+{
+ "assetId": Id of current asset chaid
+ "hash": hash of file what we've got from product server
+ "merkleRoot": root of merkle tree at Ethereum
+ "timestamp": UNIX format time when server got hash of file
+ "txNumber": Number of asset from assetId
+}
+```
 
 **Return:** JSON with Error context if not OK (For example: "assetId is already created")
 
