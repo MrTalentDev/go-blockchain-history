@@ -32,10 +32,22 @@ Client can send file to Product server and download it. Product server can send 
 ## Backend handlers 
 
 POST:
-/new/:assetId/:hash 
-Allow to create new AssetID with Hash. 
 
-Return JSON with Error context if not OK (For example: "assetId is already created")
+Route: a/new/:assetId/:hash 
+
+Description: Allow to create new AssetID with Hash. 
+
+Return: JSON with parameters
+
+"assetId": Id of current asset chaid
+"hash": hash of file what we've got from product server
+"merkleRoot": root of merkle tree at Ethereum
+"timstamp": UNIX format time when server got hash of file
+"txNumber": Number of asset from assetId
+
+Return: JSON with Error context if not OK (For example: "assetId is already created")
+
+Example: http://localhost:8080/a/new/testAsset/0293a80682dc2a192c683baf434dd67343cedd70
 
 POST:
 /update/:assetId/:hash
