@@ -31,7 +31,7 @@ Client can send file to Product server and download it. Product server can send 
 
 ## Backend handlers 
 
-POST:
+**POST:**
 
 Route: a/new/:assetId/:hash 
 
@@ -49,17 +49,24 @@ Return: JSON with Error context if not OK (For example: "assetId is already crea
 
 Example: http://localhost:8080/a/new/testAsset/0293a80682dc2a192c683baf434dd67343cedd70
 
+---
 **POST:**
 /update/:assetId/:hash
 Allow to add new asset to assetId. Returns txNumber of this hash, timesamp
+
+---
 
 **GET**
 /get/:assetId/:txNumber
 Return asset hash by assetId and txNumber
 
+---
+
 **GET**
 /proof/:assetId/:txNumber/:hash/:timestamp
 Return list of merkle proofs
+
+---
 
 **GET**
 /list
