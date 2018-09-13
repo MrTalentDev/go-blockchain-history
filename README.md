@@ -37,7 +37,7 @@ Client can send file to Product server and download it. Product server can send 
 
 **Description:** Allow to create new AssetID with Hash. 
 
-**Return:** JSON with parameters
+**Return:** JSON Ok
 ```
 {
    "assetId": Id of current asset chaid
