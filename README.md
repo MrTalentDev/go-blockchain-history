@@ -37,7 +37,7 @@ Client can send file to Product server and download it. Product server can send 
 
 **Description:** Allow to create new AssetID with Hash. 
 
-**Return:** JSON Ok
+**Return:** JSON 
 
 ```
 {
@@ -49,7 +49,7 @@ Client can send file to Product server and download it. Product server can send 
 }
 ```
 
-**Return:** JSON with Error 
+**Return:** JSON if Error 
 
 ```
 {
@@ -65,6 +65,12 @@ Client can send file to Product server and download it. Product server can send 
 /update/:assetId/:hash
 Allow to add new asset to assetId. Returns txNumber of this hash, timesamp
 
+**Description:** Allow to add new asset by assetId
+
+**Return:** JSON 
+```
+
+```
 ---
 
 **GET**
