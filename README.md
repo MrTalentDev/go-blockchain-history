@@ -16,6 +16,8 @@ Proove:
 6) check that merkle proof is correct ( it's a function with inputs: Hash file, timestamp file, assetId, txNumber - all these parameters client at the beggining)
 7) if merkle proof is correct - than all is OK 
 
+![image](https://raw.githubusercontent.com/BANKEX/poa-history/master/docs/info.svg?sanitize=true)
+
 
 ## Architecture 
 
@@ -26,6 +28,66 @@ Blockchain server - server with SMT (Sparse Merkle tree) and Ethereum connetion 
 Product server - server with DB which push merkle hash of assets to Blockchain server and stores this file uncompressed
 
 Client can send file to Product server and download it. Product server can send file to client and send a Merklee Proof to client. Client can verify data with provided merkle proof.
+
+## Backend handlers 
+
+**POST:**
+
+**Route:** a/new/:assetId/:hash 
+
+**Description:** Allow to create new AssetID with Hash. 
+
+**Return:** JSON 
+
+```
+{
+   "assetId": Id of current asset chaid
+   "hash": hash of file what we've got from product server
+   "merkleRoot": root of merkle tree at Ethereum
+   "timestamp": UNIX format time when server got hash of file
+   "txNumber": Number of asset from assetId
+}
+```
+
+**Return:** JSON if Error 
+
+```
+{
+    "Answer": "This assetId is already created"
+}
+```
+
+**Example:** http://localhost:8080/a/new/testAsset/0293a80682dc2a192c683baf434dd67343cedd70
+
+---
+
+**POST:**
+/update/:assetId/:hash
+Allow to add new asset to assetId. Returns txNumber of this hash, timesamp
+
+**Description:** Allow to add new asset by assetId
+
+**Return:** JSON 
+```
+
+```
+---
+
+**GET**
+/get/:assetId/:txNumber
+Return asset hash by assetId and txNumber
+
+---
+
+**GET**
+/proof/:assetId/:txNumber/:hash/:timestamp
+Return list of merkle proofs
+
+---
+
+**GET**
+/list
+Return all assets info
 
 
 
