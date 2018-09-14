@@ -27,6 +27,7 @@ func IntToKeccak(data int64) []byte {
 
 //BytesToKeccak converts byte to Kecckak hash of Ethereum
 func BytesToKeccak(data []byte) []byte {
+
 	hash := solsha3.SoliditySHA3(
 		solsha3.Bytes32(data),
 	)
@@ -48,10 +49,4 @@ func CellCreation(assetID string, txNumber int64) []byte {
 
 	return c
 }
-//
-//func Test(hashOne []byte, hashTwo []byte) []byte {
-//	c := solsha3.SoliditySHA3(
-//		hashOne, hashTwo,
-//	)
-//	return c
-//}
+

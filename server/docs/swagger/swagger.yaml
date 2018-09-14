@@ -1,0 +1,231 @@
+basePath: /
+definitions:
+  responses.AssetsResponse:
+    properties:
+      assets:
+        example:
+        - 1c8d54df80c03a56b5470d164c49f823108f96a67d020e4c677810c9a10b1ca7
+        items:
+          type: byte
+        type: array
+    type: object
+  responses.CreateResponse:
+    properties:
+      assetId:
+        example: a
+        type: string
+      hash:
+        example: 96e75810b7fe519dd92f6a3f72170b00c0a8a9553f9c765a3cc681eaf7eeab38
+        type: string
+      merkleRoot:
+        example:
+        - Vu14mZ91jlhkqHhjFwmgjXgxyhLjLADVQlqMSQA3Q3o=
+        items:
+          type: byte
+        type: array
+      timestamp:
+        example: 1536920750859
+        type: integer
+      txNumber:
+        example: 0
+        type: integer
+    type: object
+  responses.CreateResponseError:
+    properties:
+      Answer:
+        example: This assetId is already created
+        type: string
+    type: object
+  responses.ListResponse:
+    properties:
+      _id:
+        example: 5b869ee5ca2985e06552a49d
+        type: string
+      assetId:
+        example: a
+        type: string
+      assets:
+        type: object
+      assetsTimestamp:
+        type: object
+      created_on:
+        example: 1535549157514
+        type: integer
+      data:
+        type: string
+      hash:
+        example:
+        - qNCllA0uMdgEPSVQBYzD4JESEECY2NyjbJgGjy0NP6c=
+        items:
+          type: byte
+        type: array
+      txNumber:
+        example: 0
+        type: integer
+      updated_on:
+        example: 1535549157514
+        type: integer
+    type: object
+  responses.UpdateResponse:
+    properties:
+      assetId:
+        example: a
+        type: string
+      timestamp:
+        example: 1536920750859
+        type: integer
+      txNumber:
+        example: 1
+        type: integer
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: nk@bankexfoundation.org
+    name: API Support
+  description: This is POA History swagger documentation
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  title: Swagger History API
+  version: "1.0"
+paths:
+  /a/new/{assetId}/{hash}:
+    post:
+      consumes:
+      - text/plain
+      description: add hash by assetId
+      parameters:
+      - description: assetId
+        in: path
+        name: assetId
+        required: true
+        type: string
+      - description: Hash of file
+        in: path
+        name: hash
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/responses.CreateResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            items:
+              $ref: '#/definitions/responses.CreateResponseError'
+            type: array
+      security:
+      - BasicAuth: []
+      summary: Add a new asset to assetId
+  /a/update/{assetId}/{hash}:
+    post:
+      consumes:
+      - text/plain
+      description: add hash by assetId
+      parameters:
+      - description: assetId
+        in: path
+        name: assetId
+        required: true
+        type: string
+      - description: Hash of file
+        in: path
+        name: hash
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/responses.UpdateResponse'
+            type: array
+      security:
+      - BasicAuth: []
+      summary: Add new asset to assetId (if assetId exists)
+  /get/{assetId}/{txNumber}:
+    get:
+      consumes:
+      - text/plain
+      description: Lists all assets by assetId
+      parameters:
+      - description: assetId
+        in: path
+        name: assetId
+        required: true
+        type: string
+      - description: txNumber
+        in: path
+        name: txNumber
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/responses.AssetsResponse'
+            type: array
+      summary: Return asset by assetId
+  /list:
+    get:
+      consumes:
+      - text/plain
+      description: Lists all assets
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/responses.ListResponse'
+            type: array
+      summary: Give info about all assets and all meta information
+  /proof/{assetId}/{txNumber}/{hash}/{timestamp}:
+    get:
+      consumes:
+      - text/plain
+      description: Merkle proof for assetId, txNumber, hash, timestamp (Actually send
+        a JSON File with two arrays Data and Info
+      parameters:
+      - description: assetId
+        in: path
+        name: assetId
+        required: true
+        type: string
+      - description: txNumber
+        in: path
+        name: txNumber
+        required: true
+        type: string
+      - description: hash
+        in: path
+        name: hash
+        required: true
+        type: string
+      - description: timestamp
+        in: path
+        name: timestamp
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: test it
+          schema:
+            type: string
+      summary: Get total Merkle proof
+swagger: "2.0"

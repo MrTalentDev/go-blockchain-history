@@ -18,7 +18,7 @@ import (
 func CheckAndReturn(c *gin.Context) ([]string, string, bool) {
 	_, err := GetAssetId(c)
 	if err == nil {
-		c.JSON(200, gin.H{
+		c.JSON(http.StatusBadRequest, gin.H{
 			"Answer": "This assetId is already created",
 		})
 		return nil, "err", false
