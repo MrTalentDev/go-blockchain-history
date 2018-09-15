@@ -1,0 +1,32 @@
+version: "3"
+services:
+  blockchain:
+    image: erage/server
+    deploy:
+      replicas: 10
+      resources:
+        limits:
+          cpus: "0.2"
+          memory: 150M
+      restart_policy:
+        condition: on-failure
+    ports:
+    - "8080:8080"
+    networks:
+    - webnet
+  front:
+    image: erage/node
+    deploy:
+      replicas: 10
+      resources:
+        limits:
+          cpus: "0.2"
+          memory: 150M
+      restart_policy:
+        condition: on-failure
+    ports:
+    - "7070:7070"
+    networks:
+    - webnet
+networks:
+  webnet:

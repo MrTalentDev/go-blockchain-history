@@ -5,7 +5,7 @@ import (
 	"../assets"
 	"../tree/tree"
 	"../tree/content"
-	"../../ethercrypto/web3history"
+	"../ethercrypto/web3history"
 	"../responses"
 	"net/http"
 	"encoding/hex"

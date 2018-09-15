@@ -2,7 +2,7 @@ package main
 
 import (
 	"./db"
-	"./middlewares"
+	"./db/middlewares"
 	"./commonware/handlers"
 	"github.com/gin-gonic/gin"
 	"os"

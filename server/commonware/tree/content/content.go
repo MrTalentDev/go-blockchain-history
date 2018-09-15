@@ -1,8 +1,8 @@
 package content
 
 import (
-	"../../../ethercrypto/hashing"
-	"../../../models"
+	"../../ethercrypto/hashing"
+	"../../../db/models"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"github.com/gin-gonic/gin"

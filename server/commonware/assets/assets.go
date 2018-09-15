@@ -2,8 +2,8 @@ package assets
 
 import (
 	"github.com/gin-gonic/gin"
-	"../../models"
-	"../../ethercrypto/hashing"
+	"../../db/models"
+	"../ethercrypto/hashing"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"net/http"

@@ -1,8 +1,8 @@
 package tree
 
 import (
-	"../../../ethercrypto/tree/customsmt"
-	"../../../ethercrypto/tree/smt"
+	"../../ethercrypto/tree/customsmt"
+	"../../ethercrypto/tree/smt"
 	"../content"
 	"github.com/gin-gonic/gin"
 	"encoding/hex"
