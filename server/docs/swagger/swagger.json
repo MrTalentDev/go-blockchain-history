@@ -13,7 +13,7 @@
         },
         "version": "1.0"
     },
-    "host": "localhost:8080",
+    "host": "history.bankex.team:8080",
     "basePath": "/",
     "paths": {
         "/a/new/{assetId}/{hash}": {

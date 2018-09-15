@@ -78,7 +78,7 @@ definitions:
         example: 1
         type: integer
     type: object
-host: localhost:8080
+host: history.bankex.team:8080
 info:
   contact:
     email: nk@bankexfoundation.org
