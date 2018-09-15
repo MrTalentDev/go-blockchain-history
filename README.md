@@ -2,7 +2,7 @@
 This is on open source project which aims to make easy solution with timestamping data on blockchain
 
 ## Swagger 
-http://history.bankex.team:8080/swagger/index.html
+https://history.bankex.team:3001/
 
 ## FAQ
 
