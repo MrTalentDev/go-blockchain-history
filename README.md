@@ -4,36 +4,6 @@ This is on open source project which aims to make easy solution with timestampin
 ## Swagger 
 https://history.bankex.team:3001/
 
-## FAQ
-
-How to proof that file was uploaded with hash N and timestamp T
-Upload:
-1) Make a Sparse Merkle tree, where value is (N,T) (Before all, it's important to save N, T, Id of file)
-2) Put merkle root to ethereum server 
-Proove:
-1) Download file and get N and T
-2) Check that N = N saved before uploading 
-3) Do the same for T 
-4) Ask for Merkle proof from server
-5) Get Merkle root from ethereum contract
-6) check that merkle proof is correct ( it's a function with inputs: Hash file, timestamp file, assetId, txNumber - all these parameters client at the beggining)
-7) if merkle proof is correct - than all is OK 
-
-![image](https://raw.githubusercontent.com/BANKEX/poa-history/master/docs/info.svg?sanitize=true)
-
-
-## Architecture 
-
-How it works: 
-
-Blockchain server - server with SMT (Sparse Merkle tree) and Ethereum connetion to Contract
-
-project structure: TODO: Explain project structure with refactoring 
-
-Product server - server with DB which push merkle hash of assets to Blockchain server and stores this file uncompressed
-
-Client can send file to Product server and download it. Product server can send file to client and send a Merklee Proof to client. Client can verify data with provided merkle proof.
-
 ## Backend handlers 
 
 **POST:**
@@ -178,7 +148,7 @@ Response looks like:
 
 There are 3 servers here 
 
-**Product server:** works with MongoDb and is working on port 3000
+**Product server:** works with MongoDb and is working on port 3001
 
 **Blockchain server:** works with MongoDb and is working on port 8080
 
@@ -228,14 +198,23 @@ docker swarm init
 
 docker stack deploy -c docker-compose.yml poa_hist
 ```
-## More
-There are 3 servers:
 
-Blockchain validator server
+## FAQ
 
-Product storage server
+How to proof that file was uploaded with hash N and timestamp T
+Upload:
+1) Make a Sparse Merkle tree, where value is (N,T) (Before all, it's important to save N, T, Id of file)
+2) Put merkle root to ethereum server 
+Proove:
+1) Download file and get N and T
+2) Check that N = N saved before uploading 
+3) Do the same for T 
+4) Ask for Merkle proof from server
+5) Get Merkle root from ethereum contract
+6) check that merkle proof is correct ( it's a function with inputs: Hash file, timestamp file, assetId, txNumber - all these parameters client at the beggining)
+7) if merkle proof is correct - than all is OK 
 
-Frontend example
+![image](https://raw.githubusercontent.com/BANKEX/poa-history/master/docs/info.svg?sanitize=true)
 
 
 
