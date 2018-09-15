@@ -1,6 +1,9 @@
 ## About
 This is on open source project which aims to make easy solution with timestamping data on blockchain
 
+## Swagger 
+http://history.bankex.team:8080/swagger/index.html
+
 ## FAQ
 
 How to proof that file was uploaded with hash N and timestamp T
@@ -24,6 +27,8 @@ Proove:
 How it works: 
 
 Blockchain server - server with SMT (Sparse Merkle tree) and Ethereum connetion to Contract
+
+project structure: TODO: Explain project structure with refactoring 
 
 Product server - server with DB which push merkle hash of assets to Blockchain server and stores this file uncompressed
 
