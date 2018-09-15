@@ -1,6 +1,9 @@
 ## About
 This is on open source project which aims to make easy solution with timestamping data on blockchain
 
+## Swagger 
+http://history.bankex.team:8080/swagger/index.html
+
 ## FAQ
 
 How to proof that file was uploaded with hash N and timestamp T
