@@ -62,33 +62,134 @@ Client can send file to Product server and download it. Product server can send 
 ---
 
 **POST:**
-/update/:assetId/:hash
-Allow to add new asset to assetId. Returns txNumber of this hash, timesamp
 
-**Description:** Allow to add new asset by assetId
+**Route:** /update/:assetId/:hash
+
+**Description:** Allow to add new asset to assetId. Returns txNumber of this hash, timesamp
 
 **Return:** JSON 
-```
 
 ```
+{
+   "assetId": Id of current asset chaid
+   "timestamp": UNIX format time when server got hash of file
+   "txNumber": Number of asset from assetId
+}
+```
 ---
 
 **GET**
-/get/:assetId/:txNumber
-Return asset hash by assetId and txNumber
+
+**Route:** /get/:assetId/:txNumber
+
+**Description:** Return asset hash by assetId and txNumber
+
+**Return:** JSON 
+
+```
+{
+   "assets": current asset
+}
+```
+---
+
+**GET**
+
+**Route:** /proof/:assetId/:txNumber/:hash/:timestamp
+
+**Description:** Return list of merkle proofs by assetId, txNumber, hash, timestamp
+
+**Return:** JSON 
+
+**More about return:** Merkle proof for assetId, txNumber, hash, timestamp (Actually send a JSON File with two arrays **Data** and **Info**
+                       
+**Data** is a list of merkle proofs leaves from end to start (256 Hashes of type Buffer)
+                       
+**Info** has parameters: 
+1. Key - array key
+2. Hash - array value
+3. Root - current merkle tree Root Hash
+
+Response looks like:
+```
+{
+  {
+      "Data": [
+          {
+              "Hash": "QGTfJZ5sF0U5U0nwQDI0q+FXE7p+87DGZ1bhijbapPU="
+          },
+          {
+              "Hash": "hBp5I5E3E57YRPCIRziHXVdlPSF3nWCNKmRRcS+nQZc="
+          },
+          {
+              "Hash": "SZEJoTogdMeznCpdpIIqXM+ztBfXnLxnFCOUYTl4Jm4="
+          }
+      ], 
+      "Info": {
+              "Key": "VCRbbhhUHqe//lRV3RDBawTnATBTeZNsm9FQtwR9JMw=",
+              "Hash": "2TmoNwyUYfmxtInasAyC9xyKM7hcZq9MokNwAoQxwek=",
+              "Root": "5JX8dfEibcncG2fGp0YcG5UTY9LgrNdQoq4TWL8WpUs="
+          }
+}
+```
+
+
 
 ---
 
 **GET**
-/proof/:assetId/:txNumber/:hash/:timestamp
-Return list of merkle proofs
 
----
+**Route:** /list
 
-**GET**
-/list
-Return all assets info
+**Description:** Return all assets info
 
+**Return:** JSON 
+
+```
+{
+  {
+      "assets": [
+          {
+              "_id": "5b869ee5ca2985e06552a49d",
+              "data": "",
+              "hash": "qNCllA0uMdgEPSVQBYzD4JESEECY2NyjbJgGjy0NP6c=",
+              "created_on": 1535549157514,
+              "updated_on": 1535549157514,
+              "assetId": "bf",
+              "txNumber": 0,
+              "assets": {
+                  "0": "ludYELf+UZ3ZL2o/chcLAMCoqVU/nHZaPMaB6vfuqzg="
+              },
+              "assetsTimestamp": {
+                  "0": 1535549157514
+              }
+          }
+      ]
+}
+```
+
+
+## DevOps
+
+There are 3 servers here 
+
+**Product server:** works with MongoDb and is working on port 3000
+
+**Blockchain server:** works with MongoDb and is working on port 8080
+
+**Client server:** works with 2 servers on port 7070
+
+**NOTE**: 
+
+It's better to use more than 1 domain for project.
+
+Blockchain server is just a tool, so there is no point to change it.
+
+But product and client servers can be different. You can only run Blokchain server and make you own product and client server.
+
+You just need to have a Verify Function implemented in client part to verify merkle proofs. 
+
+It's **here** https://github.com/BANKEX/poa-history/blob/client/assets/download/index.js
 
 
 ## About ENV 
