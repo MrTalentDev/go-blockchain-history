@@ -6,12 +6,11 @@ https://history.bankex.team:3001/
 
 ## Backend handlers 
 
-**POST:**
+**[POST]**
 
 **Authentication**: Basic Auth
 
 **Route:** a/new/:assetId/:hash 
-
 **Description:** Allow to create new AssetID with Hash. 
 
 **Return:** JSON 
@@ -39,7 +38,7 @@ It's a **POST** request btw
 
 ---
 
-**POST:**
+**[POST]**
 
 **Authentication**: Basic Auth
 
@@ -62,7 +61,7 @@ It's a **POST** request btw
 
 ---
 
-**GET**
+**[GET]**
 
 **Route:** /get/:assetId/:txNumber
 
@@ -79,7 +78,7 @@ It's a **POST** request btw
 
 ---
 
-**GET**
+**[GET]**
 
 **Route:** /proof/:assetId/:txNumber/:hash/:timestamp
 
@@ -123,7 +122,7 @@ Response looks like:
 
 ---
 
-**GET**
+**[GET]**
 
 **Route:** /list
 
