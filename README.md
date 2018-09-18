@@ -34,6 +34,7 @@ https://history.bankex.team:3001/
 }
 ```
 It's a **POST** request btw
+
 **Example:** http://history.bankex.team:8080/a/new/testAsset/0293a80682dc2a192c683baf434dd67343cedd70
 
 ---
@@ -56,6 +57,7 @@ It's a **POST** request btw
 }
 ```
 It's a **POST** request btw
+
 **Example:** http://history.bankex.team:8080/a/update/testAsset/0293a80682dc2a192c683baf434dd67343cedd70
 
 ---
