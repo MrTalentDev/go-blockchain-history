@@ -32,7 +32,7 @@ https://history.bankex.team:3001/
 }
 ```
 
-**Example:** http://localhost:8080/a/new/testAsset/0293a80682dc2a192c683baf434dd67343cedd70
+**Example:** http://history.bankex.team:8080/a/new/testAsset/0293a80682dc2a192c683baf434dd67343cedd70
 
 ---
 
@@ -51,6 +51,9 @@ https://history.bankex.team:3001/
    "txNumber": Number of asset from assetId
 }
 ```
+
+**Example:** http://history.bankex.team:8080/a/update/testAsset/0293a80682dc2a192c683baf434dd67343cedd70
+
 ---
 
 **GET**
@@ -66,6 +69,8 @@ https://history.bankex.team:3001/
    "assets": current asset
 }
 ```
+**Example:** http://history.bankex.team:8080/get/testAsset/0
+
 ---
 
 **GET**
@@ -108,7 +113,7 @@ Response looks like:
 }
 ```
 
-
+**Example:** http://history.bankex.team:8080/proof/a/0/0293a80682dc2a192c683baf434dd67343cedd70/1210000000
 
 ---
 
@@ -142,8 +147,9 @@ Response looks like:
       ]
 }
 ```
+**Example:** http://history.bankex.team:8080/list
 
-
+---
 ## DevOps
 
 There are 3 servers here 
