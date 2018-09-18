@@ -11,6 +11,7 @@ https://history.bankex.team:3001/
 **Authentication**: Basic Auth
 
 **Route:** a/new/:assetId/:hash 
+
 **Description:** Allow to create new AssetID with Hash. 
 
 **Return:** JSON 
