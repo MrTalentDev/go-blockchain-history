@@ -150,6 +150,7 @@ Response looks like:
               }
           }
       ]
+   }
 }
 ```
 **Example:** http://history.bankex.team:8080/list
