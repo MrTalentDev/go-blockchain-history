@@ -214,18 +214,17 @@ docker stack deploy -c docker-compose.yml poa_hist
 
 ## FAQ
 
-How to proof that file was uploaded with hash N and timestamp T
-Upload:
-1) Make a Sparse Merkle tree, where value is (N,T) (Before all, it's important to save N, T, Id of file)
-2) Put merkle root to ethereum server 
-Proove:
-1) Download file and get N and T
-2) Check that N = N saved before uploading 
-3) Do the same for T 
-4) Ask for Merkle proof from server
-5) Get Merkle root from ethereum contract
-6) check that merkle proof is correct ( it's a function with inputs: Hash file, timestamp file, assetId, txNumber - all these parameters client at the beggining)
-7) if merkle proof is correct - than all is OK 
+How to proof that file was uploaded with hash N and timestamp T Upload:
+
+1. Make a Sparse Merkle tree, where the value is (N, T) (Before all, it's important to save N, T, Id of the file)
+2. Put Merkle root to Ethereum server Proove:
+3. Download the file and get N and T
+4. Check that N = N saved before uploading
+5. Do the same for T
+6. Ask for Merkle proof from server
+7. Get Merkle root from Ethereum contract
+8. Check that Merkle proof is correct ( it's a function with inputs: Hash file, timestamp file, assetId, txNumber - all these parameters client at the beginning)
+
 
 ![image](https://raw.githubusercontent.com/BANKEX/poa-history/master/docs/info.svg?sanitize=true)
 
