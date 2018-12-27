@@ -4,11 +4,11 @@ import (
 	"../../ethercrypto/tree/customsmt"
 	"../../ethercrypto/tree/smt"
 	"../content"
-	"github.com/gin-gonic/gin"
 	"encoding/hex"
-	"strconv"
-	"github.com/ethereum/go-ethereum/crypto/sha3"
 	"fmt"
+	"github.com/ethereum/go-ethereum/crypto/sha3"
+	"github.com/gin-gonic/gin"
+	"strconv"
 )
 
 func GetRoot(c *gin.Context) []byte {

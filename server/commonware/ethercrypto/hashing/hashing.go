@@ -1,8 +1,8 @@
 package hashing
 
 import (
-	"github.com/miguelmota/go-solidity-sha3"
 	"encoding/hex"
+	"github.com/miguelmota/go-solidity-sha3"
 	"strconv"
 )
 
@@ -49,4 +49,3 @@ func CellCreation(assetID string, txNumber int64) []byte {
 
 	return c
 }
-

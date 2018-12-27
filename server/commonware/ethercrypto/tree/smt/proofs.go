@@ -1,9 +1,9 @@
 package smt
 
 import (
-	"hash"
 	"bytes"
 	"errors"
+	"hash"
 )
 
 // VerifyProof verifies a Merkle proof.

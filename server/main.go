@@ -1,15 +1,15 @@
 package main
 
 import (
+	"./commonware/handlers"
 	"./db"
 	"./db/middlewares"
-	"./commonware/handlers"
-	"github.com/gin-gonic/gin"
-	"os"
-	"github.com/swaggo/gin-swagger"
-	"github.com/swaggo/gin-swagger/swaggerFiles"
 	_ "./docs"
 	"github.com/gin-gonic/contrib/cors"
+	"github.com/gin-gonic/gin"
+	"github.com/swaggo/gin-swagger"
+	"github.com/swaggo/gin-swagger/swaggerFiles"
+	"os"
 )
 
 var LOGIN = os.Getenv("LOGIN")

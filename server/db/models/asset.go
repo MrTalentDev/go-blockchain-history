@@ -19,5 +19,5 @@ type Asset struct {
 	AssetId        string            `json:"assetId" bson:"assetId"`
 	TxNumber       int64             `json:"txNumber" bson:"txNumber"`
 	Assets         map[string][]byte `json:"assets" bson:"assets"`
-	AssetTimeStamp map[string]int64 `json:"assetsTimestamp" bson:"assetsTimestamp"`
+	AssetTimeStamp map[string]int64  `json:"assetsTimestamp" bson:"assetsTimestamp"`
 }

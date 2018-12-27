@@ -1,6 +1,6 @@
 FROM golang:latest
 RUN mkdir /app
-ADD .. /app/
+ADD ../server /app/
 WORKDIR /app
 
 RUN go get github.com/gin-gonic/gin

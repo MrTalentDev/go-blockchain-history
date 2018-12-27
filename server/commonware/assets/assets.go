@@ -1,15 +1,15 @@
 package assets
 
 import (
-	"github.com/gin-gonic/gin"
 	"../../db/models"
 	"../ethercrypto/hashing"
+	"encoding/hex"
+	"github.com/gin-gonic/gin"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"net/http"
-	"time"
 	"strconv"
-	"encoding/hex"
+	"time"
 )
 
 //CheckAndReturn goes to mgo and check if there is an Asset Id
@@ -27,7 +27,7 @@ func CheckAndReturn(c *gin.Context) ([]string, string, bool) {
 }
 
 //Check
-func Check(c *gin.Context) (bool) {
+func Check(c *gin.Context) bool {
 	_, err := GetAssetId(c)
 	if err == nil {
 		return true
@@ -145,7 +145,7 @@ func IncrementAssetTx(c *gin.Context, timestamp int64) {
 	query := bson.M{"assetId": c.Param("assetId")}
 	var result bson.M
 	changeInDocument := mgo.Change{
-		Update:    bson.M{"$inc": bson.M{"txNumber": 1, "updated_on": time.Now().UnixNano() / int64(time.Millisecond),}},
+		Update:    bson.M{"$inc": bson.M{"txNumber": 1, "updated_on": time.Now().UnixNano() / int64(time.Millisecond)}},
 		ReturnNew: true,
 	}
 	_, err := db.C(models.CollectionAssets).Find(query).Apply(changeInDocument, &result)
@@ -154,9 +154,9 @@ func IncrementAssetTx(c *gin.Context, timestamp int64) {
 	}
 	newID := result["txNumber"]
 	c.JSON(http.StatusOK, gin.H{
-		"txNumber": newID,
+		"txNumber":  newID,
 		"timestamp": timestamp,
-		"assetId": result["assetId"],
+		"assetId":   result["assetId"],
 	})
 }
 
@@ -195,6 +195,7 @@ func GetTxNumber(c *gin.Context) int64 {
 	}
 	return asset.TxNumber
 }
+
 //GetTxNumber returns last txNumber of assetId
 func GetTimestamp(c *gin.Context) map[string]int64 {
 	db := c.MustGet("test").(*mgo.Database)

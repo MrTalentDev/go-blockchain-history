@@ -1,16 +1,16 @@
 package web3history
 
 import (
-	"fmt"
-	"log"
 	"context"
+	"fmt"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
+	"log"
 
 	"./contracts" // for demo
-	"github.com/ethereum/go-ethereum/crypto"
 	"crypto/ecdsa"
+	"github.com/ethereum/go-ethereum/crypto"
 	"math/big"
 	"os"
 )

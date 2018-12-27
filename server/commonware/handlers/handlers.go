@@ -1,21 +1,20 @@
 package handlers
 
 import (
-	"github.com/gin-gonic/gin"
 	"../assets"
-	"../tree/tree"
-	"../tree/content"
 	"../ethercrypto/web3history"
-	"../responses"
-	"net/http"
+	_ "../responses"
+	"../tree/content"
+	"../tree/tree"
 	"encoding/hex"
 	"encoding/json"
-	"strconv"
+	"github.com/gin-gonic/gin"
 	"log"
+	"net/http"
+	"strconv"
 )
 
 type Proof struct {
-	//Number string
 	Hash []byte `json:"Hash" example:"qNCllA0uMdgEPSVQBYzD4JESEECY2NyjbJgGjy0NP6c="`
 }
 type Proofs []Proof
@@ -52,11 +51,6 @@ func UpdateAssetId(c *gin.Context) {
 		defer assets.IncrementAssetTx(c, timing)
 	} else {
 	}
-}
-
-func simple() responses.CreateResponse {
-	a := responses.CreateResponse{}
-	return a
 }
 
 // @Summary Add a new asset to assetId

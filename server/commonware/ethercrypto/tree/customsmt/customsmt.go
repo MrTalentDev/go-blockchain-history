@@ -2,11 +2,11 @@ package customsmt
 
 import (
 	"../smt"
-	"github.com/ethereum/go-ethereum/crypto/sha3"
 	"encoding/hex"
+	"github.com/ethereum/go-ethereum/crypto/sha3"
 )
 
-func InitTree() (*smt.SparseMerkleTree) {
+func InitTree() *smt.SparseMerkleTree {
 	return smt.NewSparseMerkleTree(smt.NewSimpleMap(), sha3.NewKeccak256())
 }
 

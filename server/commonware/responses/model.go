@@ -20,7 +20,7 @@ type UpdateResponse struct {
 	txNumber  uint64 `json:"txNumber" example:"1"`
 }
 type AssetsResponse struct {
-	assets   []byte `json:"assets" example:"1c8d54df80c03a56b5470d164c49f823108f96a67d020e4c677810c9a10b1ca7"`
+	assets []byte `json:"assets" example:"1c8d54df80c03a56b5470d164c49f823108f96a67d020e4c677810c9a10b1ca7"`
 }
 
 type ListResponse struct {
@@ -34,6 +34,3 @@ type ListResponse struct {
 	Assets         map[string][]byte `json:"assets" example:""`
 	AssetTimeStamp map[string]int64  `json:"assetsTimestamp" example:""`
 }
-
-
-

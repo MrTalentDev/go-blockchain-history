@@ -1,12 +1,12 @@
 package content
 
 import (
-	"../../ethercrypto/hashing"
 	"../../../db/models"
+	"../../ethercrypto/hashing"
+	"encoding/hex"
+	"github.com/gin-gonic/gin"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
-	"github.com/gin-gonic/gin"
-	"encoding/hex"
 )
 
 const TREE_ID = "1"
@@ -19,7 +19,7 @@ func AddContent(c *gin.Context, txNumber int64, timestamp int64) {
 		updateContent(c, key, content)
 	} else {
 		m := make(map[string][]byte)
-		key:= CreateKey(c, txNumber)
+		key := CreateKey(c, txNumber)
 		var keys []string
 		keys = append(keys, key)
 		content := GenContent(c, timestamp)
