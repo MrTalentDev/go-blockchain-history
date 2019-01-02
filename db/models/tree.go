@@ -1,11 +1,10 @@
 package models
 
 const (
-	// CollectionAssets holds the name of the assets collection
 	CollectionTree = "tree"
 )
 
-// Assets model
+// Tree model
 type Tree struct {
 	TreeKeys    []string          `json:"TreeKeys" bson:"TreeKeys"`
 	TreeContent map[string][]byte `json:"TreeContent" bson:"TreeContent"`
